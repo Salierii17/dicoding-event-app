@@ -25,7 +25,6 @@ data class EventDetailResponse(
     @field:SerializedName("message")
     val message: String
 )
-
 data class ListEventsItem(
 
     @field:SerializedName("summary")
