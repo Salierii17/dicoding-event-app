@@ -11,13 +11,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UpcomingEventViewModel : ViewModel() {
+class EventUpcomingViewModel : ViewModel() {
 
-//    private val _event = MutableLiveData<EventResponse>()
-//    val event: LiveData<EventResponse> = _event
-
-    private val _listevent = MutableLiveData<List<ListEventsItem>>()
-    val listevent: LiveData<List<ListEventsItem>> = _listevent
+    private val _listEvent = MutableLiveData<List<ListEventsItem>>()
+    val listEvent: LiveData<List<ListEventsItem>> = _listEvent
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -33,13 +30,12 @@ class UpcomingEventViewModel : ViewModel() {
 
     private fun findEvent() {
         _isLoading.value = true
-
         val client = ApiConfig.getApiService().getEvent(ACTIVE)
         client.enqueue(object : Callback<EventResponse> {
             override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
-                    _listevent.value = response.body()?.listEvents
+                    _listEvent.value = response.body()?.listEvents
                 }
             }
 
@@ -51,6 +47,5 @@ class UpcomingEventViewModel : ViewModel() {
         })
 
     }
-
 
 }

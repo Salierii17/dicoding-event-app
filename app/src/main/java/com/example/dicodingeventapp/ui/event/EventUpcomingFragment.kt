@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentUpcomingEventBinding
 
-class UpcomingEventFragment : Fragment() {
+class EventUpcomingFragment : Fragment() {
 
     private var _binding: FragmentUpcomingEventBinding? = null
 
     private val binding get() = _binding!!
 
-    private val upcominViewModel by viewModels<UpcomingEventViewModel>()
+    private val upcomingEventViewModel by viewModels<EventUpcomingViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,12 +25,8 @@ class UpcomingEventFragment : Fragment() {
     ): View {
         _binding = FragmentUpcomingEventBinding.inflate(inflater, container, false)
         val view = binding.root
-
-
-
         return view
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,11 +35,11 @@ class UpcomingEventFragment : Fragment() {
         binding.rvUpcomingEvent.layoutManager = layoutManager
 
 
-        upcominViewModel.listevent.observe(viewLifecycleOwner) { eventData ->
+        upcomingEventViewModel.listEvent.observe(viewLifecycleOwner) { eventData ->
             setEventData(eventData)
         }
 
-        upcominViewModel.isLoading.observe(viewLifecycleOwner) {
+        upcomingEventViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
 
@@ -54,7 +50,6 @@ class UpcomingEventFragment : Fragment() {
         adapter.submitList(eventData)
         binding.rvUpcomingEvent.adapter = adapter
     }
-
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE

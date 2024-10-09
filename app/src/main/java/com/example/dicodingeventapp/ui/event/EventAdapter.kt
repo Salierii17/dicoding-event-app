@@ -16,14 +16,14 @@ class EventAdapter : ListAdapter<ListEventsItem, EventAdapter.EventViewHolder>(D
         return EventViewHolder(binding)
     }
 
-
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = getItem(position)
         holder.bind(event)
 
     }
 
-    class EventViewHolder(private var binding: ItemEventBinding) : RecyclerView.ViewHolder(binding.root) {
+    class EventViewHolder(private var binding: ItemEventBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(event: ListEventsItem) {
             Glide.with(binding.root).load(event.mediaCover).into(binding.imgEvent)
             binding.tvTitle.text = event.name

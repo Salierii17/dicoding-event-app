@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_upcoming"
-        android:name="com.example.dicodingeventapp.ui.event.UpcomingEventFragment"
+        android:name="com.example.dicodingeventapp.ui.event.EventUpcomingFragment"
         android:label="@string/title_upcoming"
         tools:layout="@layout/fragment_upcoming_event" />
 

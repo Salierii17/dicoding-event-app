@@ -8,15 +8,15 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
-    @GET("events?active=")
+    @GET("events")
     fun getEvent(
         @Query("active") isActive: Int
-    ) : Call<EventResponse>
+    ): Call<EventResponse>
 
     @GET("events/{id}")
     fun getDetailEvent(
         @Path("id") id: String
-    ) : Call<EventDetailResponse>
+    ): Call<EventDetailResponse>
 
 
 }
