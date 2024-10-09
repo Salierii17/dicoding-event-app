@@ -6,24 +6,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.response.ListEventsItem
-import com.example.dicodingeventapp.databinding.FragmentUpcomingEventBinding
+import com.example.dicodingeventapp.databinding.FragmentEventUpcomingBinding
 
 class EventUpcomingFragment : Fragment() {
 
-    private var _binding: FragmentUpcomingEventBinding? = null
+    private var _binding: FragmentEventUpcomingBinding? = null
 
     private val binding get() = _binding!!
 
     private val upcomingEventViewModel by viewModels<EventUpcomingViewModel>()
+
+    private lateinit var adapter: EventAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentUpcomingEventBinding.inflate(inflater, container, false)
+        _binding = FragmentEventUpcomingBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
@@ -34,6 +38,17 @@ class EventUpcomingFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.rvUpcomingEvent.layoutManager = layoutManager
 
+        adapter = EventAdapter { event ->
+            val bundle = Bundle().apply {
+                putInt("event_id", event.id)
+            }
+            findNavController().navigate(
+                R.id.action_navigation_upcoming_to_eventDetailFragment,
+                bundle
+            )
+        }
+
+        binding.rvUpcomingEvent.adapter = adapter
 
         upcomingEventViewModel.listEvent.observe(viewLifecycleOwner) { eventData ->
             setEventData(eventData)
@@ -46,9 +61,7 @@ class EventUpcomingFragment : Fragment() {
     }
 
     private fun setEventData(eventData: List<ListEventsItem>) {
-        val adapter = EventAdapter()
         adapter.submitList(eventData)
-        binding.rvUpcomingEvent.adapter = adapter
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -60,4 +73,5 @@ class EventUpcomingFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

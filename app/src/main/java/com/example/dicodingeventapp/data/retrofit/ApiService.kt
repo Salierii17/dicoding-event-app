@@ -15,7 +15,7 @@ interface ApiService {
 
     @GET("events/{id}")
     fun getDetailEvent(
-        @Path("id") id: String
+        @Path("id") id: Int
     ): Call<EventDetailResponse>
 
 
