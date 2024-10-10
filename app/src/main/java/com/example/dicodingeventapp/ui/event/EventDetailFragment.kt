@@ -54,10 +54,10 @@ class EventDetailFragment : Fragment() {
         eventDetailData.let {
             binding.tvName.text = it.name
             binding.tvOwnerName.text = it.ownerName
-            binding.tvQuota.text = it.quota.toString()
+        binding.tvQuota.text = it.quota.toString()
             binding.tvTime.text = it.beginTime
             binding.tvDescription.text = HtmlCompat.fromHtml(
-                it.description ?: "",
+                it.description,
                 HtmlCompat.FROM_HTML_MODE_LEGACY
             )
             Glide.with(binding.root).load(it.imageLogo).into(binding.imgMediaCover)

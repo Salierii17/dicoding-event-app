@@ -9,8 +9,8 @@ import com.bumptech.glide.Glide
 import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.ItemEventBinding
 
-class EventAdapter(private val onClick: (ListEventsItem) -> Unit) :
-    ListAdapter<ListEventsItem, EventAdapter.EventViewHolder>(DIFF_CALLBACK) {
+class EventListAdapter(private val onClick: (ListEventsItem) -> Unit) :
+    ListAdapter<ListEventsItem, EventListAdapter.EventViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -27,12 +27,12 @@ class EventAdapter(private val onClick: (ListEventsItem) -> Unit) :
         val onClick: (ListEventsItem) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(event: ListEventsItem) {
-            Glide.with(binding.root).load(event.mediaCover).into(binding.imgEvent)
-            binding.tvTitle.text = event.name
+        fun bind(eventItem: ListEventsItem) {
+            Glide.with(binding.root).load(eventItem.mediaCover).into(binding.imgMediaCover)
+            binding.tvName.text = eventItem.name
 
             itemView.setOnClickListener {
-                onClick(event)
+                onClick(eventItem)
             }
         }
     }

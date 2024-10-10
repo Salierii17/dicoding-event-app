@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
 import androidx.navigation.fragment.R
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -21,7 +20,7 @@ class EventFinishedFragment : Fragment() {
 
     private val eventFinishedViewModel by viewModels<EventFinishedViewModel>()
 
-    private lateinit var adapter: EventAdapter
+    private lateinit var adapter: EventListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +38,7 @@ class EventFinishedFragment : Fragment() {
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.rvFinishedEvent.layoutManager = layoutManager
 
-        adapter = EventAdapter { event ->
+        adapter = EventListAdapter { event ->
             val bundle = Bundle().apply {
                 putInt("event_id", event.id)
             }

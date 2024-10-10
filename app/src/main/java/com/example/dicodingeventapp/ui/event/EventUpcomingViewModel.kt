@@ -25,10 +25,10 @@ class EventUpcomingViewModel : ViewModel() {
     }
 
     init {
-        findEvent()
+        fetchEvent()
     }
 
-    private fun findEvent() {
+    private fun fetchEvent() {
         _isLoading.value = true
         val client = ApiConfig.getApiService().getEvent(ACTIVE)
         client.enqueue(object : Callback<EventResponse> {

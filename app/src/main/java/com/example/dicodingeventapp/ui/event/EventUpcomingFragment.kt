@@ -20,7 +20,7 @@ class EventUpcomingFragment : Fragment() {
 
     private val upcomingEventViewModel by viewModels<EventUpcomingViewModel>()
 
-    private lateinit var adapter: EventAdapter
+    private lateinit var adapter: EventListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,9 +38,9 @@ class EventUpcomingFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.rvUpcomingEvent.layoutManager = layoutManager
 
-        adapter = EventAdapter { event ->
+        adapter = EventListAdapter { eventItem ->
             val bundle = Bundle().apply {
-                putInt("event_id", event.id)
+                putInt("event_id", eventItem.id)
             }
             findNavController().navigate(
                 R.id.action_navigation_upcoming_to_eventDetailFragment,
