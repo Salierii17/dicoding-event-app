@@ -1,4 +1,4 @@
-package com.example.dicodingeventapp.ui.event
+package com.example.dicodingeventapp.ui.finished
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.R
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentEventFinishedBinding
+import com.example.dicodingeventapp.EventListAdapter
+import com.example.dicodingeventapp.R
 
 class EventFinishedFragment : Fragment() {
 
@@ -42,7 +43,7 @@ class EventFinishedFragment : Fragment() {
             val bundle = Bundle().apply {
                 putInt("event_id", event.id)
             }
-            findNavController().navigate(R.id.nav_host_fragment_container, bundle)
+            findNavController().navigate(R.id.action_navigation_finished_to_eventDetailFragment, bundle)
         }
 
         binding.rvFinishedEvent.adapter = adapter

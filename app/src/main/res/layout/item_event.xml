@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
-
     app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,10 +16,11 @@
             android:id="@+id/tvName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
             android:text="@string/event_title"
-
             android:textAppearance="?attr/textAppearanceBodyLarge"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -33,7 +33,6 @@
             android:id="@+id/imgMediaCover"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:contentDescription="@string/event_image"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/tvName"

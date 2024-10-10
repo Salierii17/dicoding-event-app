@@ -1,4 +1,4 @@
-package com.example.dicodingeventapp.ui.event
+package com.example.dicodingeventapp.ui.finished
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -14,10 +14,10 @@ import retrofit2.Response
 class EventFinishedViewModel : ViewModel() {
 
     private val _listEvent = MutableLiveData<List<ListEventsItem>>()
-    var listEvent: LiveData<List<ListEventsItem>> = _listEvent
+    val listEvent: LiveData<List<ListEventsItem>> = _listEvent
 
     private val _isLoading = MutableLiveData<Boolean>()
-    var isLoading: LiveData<Boolean> = _isLoading
+    val isLoading: LiveData<Boolean> = _isLoading
 
     companion object {
         private const val TAG = "EventFinishedViewModel"

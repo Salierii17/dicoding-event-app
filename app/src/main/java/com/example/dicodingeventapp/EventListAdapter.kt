@@ -1,45 +1,34 @@
-package com.example.dicodingeventapp.ui.home
+package com.example.dicodingeventapp
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dicodingeventapp.data.response.ListEventsItem
-import com.example.dicodingeventapp.databinding.CarouselItemEventBinding
+import com.example.dicodingeventapp.databinding.ItemEventBinding
 
-class EventCarouselAdapter(
-    private val onClick: (ListEventsItem) -> Unit
-) : ListAdapter<ListEventsItem, EventCarouselAdapter.CarouselViewHolder>(DIFF_CALLBACK) {
+class EventListAdapter(private val onClick: (ListEventsItem) -> Unit) :
+    ListAdapter<ListEventsItem, EventListAdapter.EventViewHolder>(DIFF_CALLBACK) {
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarouselViewHolder {
-        val view =
-            CarouselItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CarouselViewHolder(view, onClick)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
+        val view = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return EventViewHolder(view, onClick)
     }
 
-
-    override fun onBindViewHolder(holder: CarouselViewHolder, position: Int) {
-        val eventItem = getItem(position)
-        holder.bind(eventItem)
-
-        if (position < 5) {
-            holder.itemView.visibility = View.VISIBLE
-        } else {
-            holder.itemView.visibility = View.GONE
-        }
+    override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
+        val event = getItem(position)
+        holder.bind(event)
     }
 
-    class CarouselViewHolder(
-        private var binding: CarouselItemEventBinding,
+    class EventViewHolder(
+        private var binding: ItemEventBinding,
         val onClick: (ListEventsItem) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(eventItem: ListEventsItem) {
-            Glide.with(binding.root).load(eventItem.imageLogo).into(binding.imgMediaCover)
+            Glide.with(binding.root).load(eventItem.mediaCover).into(binding.imgMediaCover)
             binding.tvName.text = eventItem.name
 
             itemView.setOnClickListener {
@@ -65,5 +54,6 @@ class EventCarouselAdapter(
             }
 
         }
+
     }
 }

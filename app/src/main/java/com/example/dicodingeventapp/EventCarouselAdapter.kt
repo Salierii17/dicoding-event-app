@@ -1,4 +1,4 @@
-package com.example.dicodingeventapp.ui.event
+package com.example.dicodingeventapp
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,28 +7,37 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dicodingeventapp.data.response.ListEventsItem
-import com.example.dicodingeventapp.databinding.ItemEventBinding
+import com.example.dicodingeventapp.databinding.CarouselItemEventBinding
 
-class EventListAdapter(private val onClick: (ListEventsItem) -> Unit) :
-    ListAdapter<ListEventsItem, EventListAdapter.EventViewHolder>(DIFF_CALLBACK) {
+class EventCarouselAdapter(
+    private val onClick: (ListEventsItem) -> Unit
+) : ListAdapter<ListEventsItem, EventCarouselAdapter.CarouselViewHolder>(DIFF_CALLBACK) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
-        val view = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return EventViewHolder(view, onClick)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarouselViewHolder {
+        val view =
+            CarouselItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CarouselViewHolder(view, onClick)
     }
 
-    override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
-        val event = getItem(position)
-        holder.bind(event)
+
+    override fun onBindViewHolder(holder: CarouselViewHolder, position: Int) {
+        val eventItem = getItem(position)
+        holder.bind(eventItem)
     }
 
-    class EventViewHolder(
-        private var binding: ItemEventBinding,
+    //
+    override fun getItemCount(): Int {
+        return minOf(super.getItemCount(), 5)
+    }
+
+    class CarouselViewHolder(
+        private var binding: CarouselItemEventBinding,
         val onClick: (ListEventsItem) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(eventItem: ListEventsItem) {
-            Glide.with(binding.root).load(eventItem.mediaCover).into(binding.imgMediaCover)
+            Glide.with(binding.root).load(eventItem.imageLogo).into(binding.imgMediaCover)
             binding.tvName.text = eventItem.name
 
             itemView.setOnClickListener {
@@ -38,6 +47,7 @@ class EventListAdapter(private val onClick: (ListEventsItem) -> Unit) :
     }
 
     companion object {
+
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListEventsItem>() {
             override fun areItemsTheSame(
                 oldItem: ListEventsItem,
@@ -54,6 +64,5 @@ class EventListAdapter(private val onClick: (ListEventsItem) -> Unit) :
             }
 
         }
-
     }
 }

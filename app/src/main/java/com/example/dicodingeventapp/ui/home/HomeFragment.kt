@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -11,9 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentHomeBinding
-import com.example.dicodingeventapp.ui.event.EventFinishedViewModel
-import com.example.dicodingeventapp.ui.event.EventListAdapter
-import com.example.dicodingeventapp.ui.event.EventUpcomingViewModel
+import com.example.dicodingeventapp.EventCarouselAdapter
+import com.example.dicodingeventapp.EventListAdapter
+import com.example.dicodingeventapp.ui.finished.EventFinishedViewModel
+import com.example.dicodingeventapp.ui.upcoming.EventUpcomingViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class HomeFragment : Fragment() {
 
@@ -23,10 +26,12 @@ class HomeFragment : Fragment() {
 
     private val eventUpcomingViewModel by viewModels<EventUpcomingViewModel>()
     private val eventFinishedViewModel by viewModels<EventFinishedViewModel>()
+    private val homeViewModel by viewModels<HomeViewModel>()
 
 
     private lateinit var upcomingEventListAdapter: EventCarouselAdapter
-    private lateinit var finishedEventListAdapter: EventListAdapter
+    private lateinit var finishedEventListAdapter: EventCarouselAdapter
+    private lateinit var searchAdapter: EventListAdapter
 
 
     override fun onCreateView(
@@ -42,17 +47,27 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
 
-        val carouselLayoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvUpcomingEvent.layoutManager = carouselLayoutManager
-        binding.rvFinishedEvent.layoutManager = LinearLayoutManager(context)
+        with(binding) {
+            searchView.setupWithSearchBar(searchBar)
+            searchView.editText.setOnEditorActionListener {textView, actionId, event ->
+                searchBar.setText(searchView.text)
+                searchView.hide()
+                Snackbar.make(view, searchView.text, Toast.LENGTH_SHORT).show()
+                false
+            }
+        }
 
-       upcomingEventListAdapter = EventCarouselAdapter {eventItem ->
-           navigateToEventDetail(eventItem.id)
-       }
-        finishedEventListAdapter = EventListAdapter { eventItem ->
-           navigateToEventDetail(eventItem.id)
-       }
+
+        binding.rvUpcomingEvent.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+//        binding.rvFinishedEvent.layoutManager = LinearLayoutManager(context)
+        binding.rvFinishedEvent.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        upcomingEventListAdapter = EventCarouselAdapter { eventItem ->
+            navigateToEventDetail(eventItem.id)
+        }
+        finishedEventListAdapter = EventCarouselAdapter { eventItem ->
+            navigateToEventDetail(eventItem.id)
+        }
 
         binding.rvUpcomingEvent.adapter = upcomingEventListAdapter
         binding.rvFinishedEvent.adapter = finishedEventListAdapter
@@ -85,6 +100,7 @@ class HomeFragment : Fragment() {
     private fun setUpcomingEventData(eventData: List<ListEventsItem>) {
         upcomingEventListAdapter.submitList(eventData)
     }
+
     private fun setFinishedEventData(eventData: List<ListEventsItem>) {
         finishedEventListAdapter.submitList(eventData)
     }

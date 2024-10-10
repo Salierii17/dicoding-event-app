@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_upcoming"
-        android:name="com.example.dicodingeventapp.ui.event.EventUpcomingFragment"
+        android:name="com.example.dicodingeventapp.ui.upcoming.EventUpcomingFragment"
         android:label="@string/title_upcoming"
         tools:layout="@layout/fragment_event_upcoming">
         <action
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/navigation_finished"
-        android:name="com.example.dicodingeventapp.ui.event.EventFinishedFragment"
+        android:name="com.example.dicodingeventapp.ui.finished.EventFinishedFragment"
         android:label="@string/title_finished"
         tools:layout="@layout/fragment_event_finished" >
         <action
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/eventDetailFragment"
-        android:name="com.example.dicodingeventapp.ui.event.EventDetailFragment"
-        android:label="fragment_event_detail"
+        android:name="com.example.dicodingeventapp.ui.detail.EventDetailFragment"
+        android:label="@string/title_event_detail"
         tools:layout="@layout/fragment_event_detail" />
 </navigation>

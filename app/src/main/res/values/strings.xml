@@ -50,4 +50,6 @@
     </string>
     <string name="owner_name">Owner Name</string>
     <string name="title">Title</string>
+    <string name="search">Search</string>
+    <string name="title_event_detail">Event Detail</string>
 </resources>

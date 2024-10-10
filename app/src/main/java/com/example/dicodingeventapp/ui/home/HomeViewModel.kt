@@ -13,34 +13,35 @@ import retrofit2.Response
 
 class HomeViewModel : ViewModel() {
 
-    private val _listEvent = MutableLiveData<List<ListEventsItem>>()
-    val listEvent: LiveData<List<ListEventsItem>> = _listEvent
-
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _searchResult = MutableLiveData<List<ListEventsItem>>()
+    val searchResult: LiveData<List<ListEventsItem>> = _searchResult
 
     companion object {
         private const val TAG = "HomeViewModel"
     }
-
-    fun fetchEvent(onActive: Int) {
+    fun search(query: String) {
         _isLoading.value = true
-        val client = ApiConfig.getApiService().getEvent(onActive)
+        val client = ApiConfig.getApiService().searchEvent(query)
         client.enqueue(object : Callback<EventResponse> {
             override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
-                    _listEvent.value = response.body()?.listEvents
+                    _searchResult.postValue(response.body()?.listEvents)
                 } else {
-                    Log.e(TAG, "OnFailure: ${response.message()}")
+                    _searchResult.value = emptyList()
+                    Log.e(TAG, "onFailure : ${response.message()}")
                 }
             }
-
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
                 _isLoading.value = false
                 Log.e(TAG, "onFailure: ${t.message}")
             }
-
         })
+
     }
+
+
 }

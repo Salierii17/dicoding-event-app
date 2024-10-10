@@ -1,4 +1,4 @@
-package com.example.dicodingeventapp.ui.event
+package com.example.dicodingeventapp.ui.detail
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.dicodingeventapp.data.response.Event
 import com.example.dicodingeventapp.data.response.EventDetailResponse
-import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.data.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback

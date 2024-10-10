@@ -1,5 +1,7 @@
-package com.example.dicodingeventapp.ui.event
+package com.example.dicodingeventapp.ui.detail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -50,17 +52,27 @@ class EventDetailFragment : Fragment() {
 
     }
 
+
     private fun setEventDetailData(eventDetailData: Event) {
-        eventDetailData.let {
-            binding.tvName.text = it.name
-            binding.tvOwnerName.text = it.ownerName
-        binding.tvQuota.text = it.quota.toString()
-            binding.tvTime.text = it.beginTime
-            binding.tvDescription.text = HtmlCompat.fromHtml(
-                it.description,
-                HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
-            Glide.with(binding.root).load(it.imageLogo).into(binding.imgMediaCover)
+        eventDetailData.let {event ->
+            with(binding) {
+                Glide.with(root).load(event.imageLogo).into(imgMediaCover)
+                tvName.text = event.name
+                tvOwnerName.text = event.ownerName
+                tvQuota.text = event.quota.toString()
+                tvTime.text = event.beginTime
+                tvDescription.text = HtmlCompat.fromHtml(
+                    event.description,
+                    HtmlCompat.FROM_HTML_MODE_LEGACY
+                )
+                btnLink.setOnClickListener{
+                    val url = event.link
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(url)
+                    startActivity(intent)
+                }
+            }
+
         }
 
     }
@@ -68,4 +80,5 @@ class EventDetailFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
+
 }

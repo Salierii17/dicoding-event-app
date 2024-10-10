@@ -1,4 +1,4 @@
-package com.example.dicodingeventapp.ui.event
+package com.example.dicodingeventapp.ui.upcoming
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -20,7 +20,7 @@ class EventUpcomingViewModel : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     companion object {
-        private const val TAG = "UpcomingEventModel"
+        private const val TAG = "EventUpcomingViewModel"
         private const val ACTIVE = 1
     }
 
@@ -36,14 +36,12 @@ class EventUpcomingViewModel : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     _listEvent.value = response.body()?.listEvents
-                } else {
-
                 }
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
                 _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
+                Log.e(TAG, "onFailure: ${t.message}")
             }
 
         })
