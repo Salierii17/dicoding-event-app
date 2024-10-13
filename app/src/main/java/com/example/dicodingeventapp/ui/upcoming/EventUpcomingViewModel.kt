@@ -36,6 +36,8 @@ class EventUpcomingViewModel : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     _listEvent.value = response.body()?.listEvents
+                } else {
+                    Log.e(TAG, "Response: ${response.message()}")
                 }
             }
 

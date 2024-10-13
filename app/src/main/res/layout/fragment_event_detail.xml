@@ -7,17 +7,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".ui.detail.EventDetailFragment">
 
         <ImageView
             android:id="@+id/imgMediaCover"
             android:layout_width="0dp"
             android:layout_height="200dp"
+            android:contentDescription="@string/event_image"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ImageContrastCheck"
             tools:src="@tools:sample/avatars" />
 
         <TextView
@@ -50,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:text="Quota"
+            android:text="@string/quota"
             app:layout_constraintBottom_toBottomOf="@+id/tvOwnerName"
             app:layout_constraintStart_toEndOf="@+id/tvOwnerName"
             app:layout_constraintTop_toTopOf="@+id/tvOwnerName"
@@ -62,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="14dp"
-            android:text="Begin Time"
+            android:text="@string/time"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvOwnerName" />
 
@@ -73,7 +75,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:text="Description"
+            android:text="@string/description"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             app:layout_constraintBottom_toTopOf="@+id/btn_link"
             app:layout_constraintEnd_toEndOf="parent"
@@ -87,11 +89,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            android:text="Register"
+            android:text="@string/register"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="VisualLintButtonSize" />
 
 
         <ProgressBar

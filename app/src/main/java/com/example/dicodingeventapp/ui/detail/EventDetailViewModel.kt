@@ -35,7 +35,7 @@ class EventDetailViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     _eventDetail.value = response.body()?.event
                 } else {
-                    Log.e(TAG, "Error: ${response.message()}")
+                    Log.e(TAG, "Response: ${response.message()}")
                 }
             }
 

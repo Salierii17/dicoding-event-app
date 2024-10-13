@@ -9,17 +9,15 @@ import com.bumptech.glide.Glide
 import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.CarouselItemEventBinding
 
-class EventCarouselAdapter(
+class CarouselAdapter(
     private val onClick: (ListEventsItem) -> Unit
-) : ListAdapter<ListEventsItem, EventCarouselAdapter.CarouselViewHolder>(DIFF_CALLBACK) {
-
+) : ListAdapter<ListEventsItem, CarouselAdapter.CarouselViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarouselViewHolder {
         val view =
             CarouselItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CarouselViewHolder(view, onClick)
     }
-
 
     override fun onBindViewHolder(holder: CarouselViewHolder, position: Int) {
         val eventItem = getItem(position)
@@ -47,7 +45,6 @@ class EventCarouselAdapter(
     }
 
     companion object {
-
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListEventsItem>() {
             override fun areItemsTheSame(
                 oldItem: ListEventsItem,

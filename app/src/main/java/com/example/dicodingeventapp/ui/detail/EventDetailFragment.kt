@@ -34,7 +34,7 @@ class EventDetailFragment : Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
 
-        val eventID = arguments?.getInt("event_id", 8948)
+        val eventID = arguments?.getInt("event_id", 0)
 
         if (eventID != null && eventID != -1) {
             eventDetailViewModel.fetchEventDetail(eventID)
@@ -52,15 +52,16 @@ class EventDetailFragment : Fragment() {
 
     }
 
-
     private fun setEventDetailData(eventDetailData: Event) {
         eventDetailData.let { event ->
             with(binding) {
                 Glide.with(root).load(event.imageLogo).into(imgMediaCover)
                 tvName.text = event.name
                 tvOwnerName.text = event.ownerName
-                tvQuota.text = event.quota.toString()
-                tvTime.text = event.beginTime
+                val qouta = (event.quota - event.registrants).toString()
+                tvQuota.text = qouta
+                val eventTime = "${event.beginTime} - ${event.endTime}"
+                tvTime.text = eventTime
                 tvDescription.text = HtmlCompat.fromHtml(
                     event.description,
                     HtmlCompat.FROM_HTML_MODE_LEGACY

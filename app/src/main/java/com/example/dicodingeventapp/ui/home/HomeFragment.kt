@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.dicodingeventapp.EventCarouselAdapter
+import com.example.dicodingeventapp.CarouselAdapter
 import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.SearchAdapter
 import com.example.dicodingeventapp.data.response.ListEventsItem
@@ -30,8 +30,8 @@ class HomeFragment : Fragment() {
     private val homeViewModel by viewModels<HomeViewModel>()
 
 
-    private lateinit var upcomingEventListAdapter: EventCarouselAdapter
-    private lateinit var finishedEventListAdapter: EventCarouselAdapter
+    private lateinit var upcomingEventListAdapter: CarouselAdapter
+    private lateinit var finishedEventListAdapter: CarouselAdapter
     private lateinit var searchAdapter: SearchAdapter
 
 
@@ -57,10 +57,10 @@ class HomeFragment : Fragment() {
         searchAdapter = SearchAdapter { eventItem ->
             navigateToEventDetail(eventItem.id)
         }
-        upcomingEventListAdapter = EventCarouselAdapter { eventItem ->
+        upcomingEventListAdapter = CarouselAdapter { eventItem ->
             navigateToEventDetail(eventItem.id)
         }
-        finishedEventListAdapter = EventCarouselAdapter { eventItem ->
+        finishedEventListAdapter = CarouselAdapter { eventItem ->
             navigateToEventDetail(eventItem.id)
         }
 

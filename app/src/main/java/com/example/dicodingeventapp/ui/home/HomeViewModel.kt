@@ -13,7 +13,6 @@ import retrofit2.Response
 
 class HomeViewModel : ViewModel() {
 
-
     private val _searchResult = MutableLiveData<List<ListEventsItem>>()
     val searchResult: LiveData<List<ListEventsItem>> = _searchResult
 

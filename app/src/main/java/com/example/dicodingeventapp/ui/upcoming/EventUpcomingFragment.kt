@@ -8,10 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.dicodingeventapp.EventListAdapter
 import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentEventUpcomingBinding
-import com.example.dicodingeventapp.EventListAdapter
 
 class EventUpcomingFragment : Fragment() {
 

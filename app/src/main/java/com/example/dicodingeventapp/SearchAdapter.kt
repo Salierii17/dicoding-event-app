@@ -12,7 +12,6 @@ import com.example.dicodingeventapp.databinding.ItemSearchLayoutBinding
 class SearchAdapter(private val onClick: (ListEventsItem) -> Unit) :
     ListAdapter<ListEventsItem, SearchAdapter.EventViewHolder>(DIFF_CALLBACK) {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view =
             ItemSearchLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -54,8 +53,6 @@ class SearchAdapter(private val onClick: (ListEventsItem) -> Unit) :
             ): Boolean {
                 return oldItem == newItem
             }
-
         }
-
     }
 }

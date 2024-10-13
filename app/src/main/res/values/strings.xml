@@ -52,4 +52,7 @@
     <string name="title">Title</string>
     <string name="search">Search</string>
     <string name="title_event_detail">Event Detail</string>
+    <string name="register">Register</string>
+    <string name="time">Time</string>
+    <string name="quota">Quota</string>
 </resources>
