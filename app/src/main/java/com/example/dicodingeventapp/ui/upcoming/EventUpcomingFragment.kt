@@ -12,6 +12,7 @@ import com.example.dicodingeventapp.EventListAdapter
 import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentEventUpcomingBinding
+import com.google.android.material.snackbar.Snackbar
 
 class EventUpcomingFragment : Fragment() {
 
@@ -54,9 +55,17 @@ class EventUpcomingFragment : Fragment() {
         upcomingEventViewModel.listEvent.observe(viewLifecycleOwner) { eventData ->
             setEventData(eventData)
         }
-
         upcomingEventViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
+        }
+        upcomingEventViewModel.snackBar.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { message ->
+                Snackbar.make(
+                    binding.root,
+                    message,
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
         }
 
     }

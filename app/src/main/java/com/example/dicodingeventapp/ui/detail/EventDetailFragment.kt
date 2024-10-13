@@ -58,8 +58,8 @@ class EventDetailFragment : Fragment() {
                 Glide.with(root).load(event.imageLogo).into(imgMediaCover)
                 tvName.text = event.name
                 tvOwnerName.text = event.ownerName
-                val qouta = (event.quota - event.registrants).toString()
-                tvQuota.text = qouta
+                val quota = (event.quota - event.registrants).toString()
+                tvQuota.text = quota
                 val eventTime = "${event.beginTime} - ${event.endTime}"
                 tvTime.text = eventTime
                 tvDescription.text = HtmlCompat.fromHtml(

@@ -22,9 +22,6 @@ class EventListAdapter(private val onClick: (ListEventsItem) -> Unit) :
         holder.bind(event)
     }
 
-    override fun getItemCount(): Int {
-        return minOf(super.getItemCount(), 10)
-    }
     class EventViewHolder(
         private var binding: ItemEventBinding,
         val onClick: (ListEventsItem) -> Unit
