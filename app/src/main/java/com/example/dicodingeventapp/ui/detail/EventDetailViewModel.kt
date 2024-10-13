@@ -47,11 +47,11 @@ class EventDetailViewModel : ViewModel() {
 
             override fun onFailure(call: Call<EventDetailResponse>, t: Throwable) {
                 _isLoading.value = false
-                val message =
-                    "Unable to connect. Please check your internet connection and try again."
+                val message = "onFailure: ${t.message.toString()}"
                 _snackBar.value = Event(message)
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
+                Log.e(TAG, message)
             }
+
         })
     }
 }

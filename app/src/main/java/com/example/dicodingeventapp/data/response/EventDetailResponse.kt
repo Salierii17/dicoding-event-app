@@ -10,7 +10,7 @@ data class EventDetailResponse(
 	@field:SerializedName("message")
 	val message: String,
 
-	@field:SerializedName("ListEventsDetailItem")
+	@field:SerializedName("event")
 	val event: ListEventsDetailItem
 )
 

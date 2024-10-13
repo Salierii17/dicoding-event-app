@@ -21,7 +21,7 @@ class HomeViewModel : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     private val _snackBar = MutableLiveData<Event<String>>()
-    val snackBar : LiveData<Event<String>> = _snackBar
+    val snackBar: LiveData<Event<String>> = _snackBar
 
     companion object {
         private const val TAG = "HomeViewModel"
@@ -35,7 +35,9 @@ class HomeViewModel : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     _searchResult.value = response.body()?.listEvents
+//                    _snackBar.value = Event(response.body()?.message.toString())
                 } else {
+                    _snackBar.value = Event(response.message())
                     Log.d(TAG, "Response: ${response.body()?.listEvents}")
                 }
             }
