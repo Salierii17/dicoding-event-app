@@ -54,7 +54,7 @@ class EventDetailFragment : Fragment() {
 
 
     private fun setEventDetailData(eventDetailData: Event) {
-        eventDetailData.let {event ->
+        eventDetailData.let { event ->
             with(binding) {
                 Glide.with(root).load(event.imageLogo).into(imgMediaCover)
                 tvName.text = event.name
@@ -65,14 +65,13 @@ class EventDetailFragment : Fragment() {
                     event.description,
                     HtmlCompat.FROM_HTML_MODE_LEGACY
                 )
-                btnLink.setOnClickListener{
+                btnLink.setOnClickListener {
                     val url = event.link
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.data = Uri.parse(url)
                     startActivity(intent)
                 }
             }
-
         }
 
     }

@@ -14,7 +14,7 @@ import retrofit2.Response
 class EventDetailViewModel : ViewModel() {
 
     private val _eventDetail = MutableLiveData<Event>()
-    val eventDetail: LiveData<Event>  = _eventDetail
+    val eventDetail: LiveData<Event> = _eventDetail
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading

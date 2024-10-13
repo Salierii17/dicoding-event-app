@@ -8,10 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.dicodingeventapp.data.response.ListEventsItem
-import com.example.dicodingeventapp.databinding.FragmentEventFinishedBinding
 import com.example.dicodingeventapp.EventListAdapter
 import com.example.dicodingeventapp.R
+import com.example.dicodingeventapp.data.response.ListEventsItem
+import com.example.dicodingeventapp.databinding.FragmentEventFinishedBinding
 
 class EventFinishedFragment : Fragment() {
 
@@ -43,7 +43,10 @@ class EventFinishedFragment : Fragment() {
             val bundle = Bundle().apply {
                 putInt("event_id", event.id)
             }
-            findNavController().navigate(R.id.action_navigation_finished_to_eventDetailFragment, bundle)
+            findNavController().navigate(
+                R.id.action_navigation_finished_to_eventDetailFragment,
+                bundle
+            )
         }
 
         binding.rvFinishedEvent.adapter = adapter
@@ -63,7 +66,6 @@ class EventFinishedFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

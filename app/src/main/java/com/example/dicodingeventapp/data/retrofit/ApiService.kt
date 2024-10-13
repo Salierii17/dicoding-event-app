@@ -2,6 +2,7 @@ package com.example.dicodingeventapp.data.retrofit
 
 import com.example.dicodingeventapp.data.response.EventDetailResponse
 import com.example.dicodingeventapp.data.response.EventResponse
+import com.example.dicodingeventapp.data.response.ListEventsItem
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -18,7 +19,7 @@ interface ApiService {
         @Path("id") id: Int
     ): Call<EventDetailResponse>
 
-    @GET("search?q=")
+    @GET("events")
     fun searchEvent(
         @Query("q") query: String
     ): Call<EventResponse>

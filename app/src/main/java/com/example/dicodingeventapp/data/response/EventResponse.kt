@@ -50,7 +50,6 @@ data class ListEventsItem(
     @field:SerializedName("name")
     val name: String,
 
-
     @field:SerializedName("beginTime")
     val beginTime: String,
 
