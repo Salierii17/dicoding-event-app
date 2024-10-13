@@ -1,7 +1,6 @@
 package com.example.dicodingeventapp.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingeventapp.EventCarouselAdapter
-import com.example.dicodingeventapp.EventListAdapter
 import com.example.dicodingeventapp.R
+import com.example.dicodingeventapp.SearchAdapter
 import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentHomeBinding
 import com.example.dicodingeventapp.ui.finished.EventFinishedViewModel
@@ -33,7 +32,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var upcomingEventListAdapter: EventCarouselAdapter
     private lateinit var finishedEventListAdapter: EventCarouselAdapter
-    private lateinit var searchAdapter: EventListAdapter
+    private lateinit var searchAdapter: SearchAdapter
 
 
     override fun onCreateView(
@@ -49,24 +48,25 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
 
+        binding.rvSearchResult.layoutManager = LinearLayoutManager(context)
         binding.rvUpcomingEvent.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvFinishedEvent.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvSearchResult.layoutManager = LinearLayoutManager(context)
 
-
-        searchAdapter = EventListAdapter { eventItem ->
+        searchAdapter = SearchAdapter { eventItem ->
             navigateToEventDetail(eventItem.id)
         }
-        binding.rvSearchResult.adapter = searchAdapter
+        upcomingEventListAdapter = EventCarouselAdapter { eventItem ->
+            navigateToEventDetail(eventItem.id)
+        }
+        finishedEventListAdapter = EventCarouselAdapter { eventItem ->
+            navigateToEventDetail(eventItem.id)
+        }
 
-        homeViewModel.searchResult.observe(viewLifecycleOwner) { eventItem ->
-            setSearchResultData(eventItem)
-        }
-        homeViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
+        binding.rvSearchResult.adapter = searchAdapter
+        binding.rvUpcomingEvent.adapter = upcomingEventListAdapter
+        binding.rvFinishedEvent.adapter = finishedEventListAdapter
 
         with(binding) {
             searchView.setupWithSearchBar(searchBar)
@@ -84,32 +84,26 @@ class HomeFragment : Fragment() {
             }
         }
 
-        upcomingEventListAdapter = EventCarouselAdapter { eventItem ->
-            navigateToEventDetail(eventItem.id)
+        homeViewModel.searchResult.observe(viewLifecycleOwner) { eventItem ->
+            setSearchResultData(eventItem)
         }
-        binding.rvUpcomingEvent.adapter = upcomingEventListAdapter
+        homeViewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
+        }
 
         eventUpcomingViewModel.listEvent.observe(viewLifecycleOwner) { eventData ->
             setUpcomingEventData(eventData)
         }
-
         eventUpcomingViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
 
-        finishedEventListAdapter = EventCarouselAdapter { eventItem ->
-            navigateToEventDetail(eventItem.id)
-        }
-        binding.rvFinishedEvent.adapter = finishedEventListAdapter
-
         eventFinishedViewModel.listEvent.observe(viewLifecycleOwner) { eventData ->
             setFinishedEventData(eventData)
         }
-
         eventFinishedViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
-
 
     }
 
