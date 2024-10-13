@@ -88,21 +88,21 @@ class HomeFragment : Fragment() {
             setSearchResultData(eventItem)
         }
         homeViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
+            showSearchLoading(it)
         }
 
         eventUpcomingViewModel.listEvent.observe(viewLifecycleOwner) { eventData ->
             setUpcomingEventData(eventData)
         }
         eventUpcomingViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
+            showUpcomingEventLoading(it)
         }
 
         eventFinishedViewModel.listEvent.observe(viewLifecycleOwner) { eventData ->
             setFinishedEventData(eventData)
         }
         eventFinishedViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
+            showFinishedEventLoading(it)
         }
 
     }
@@ -131,8 +131,15 @@ class HomeFragment : Fragment() {
         finishedEventListAdapter.submitList(eventData)
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    private fun showUpcomingEventLoading(isLoading: Boolean) {
+        binding.pbUpcomingEvent.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun showFinishedEventLoading(isLoading: Boolean) {
+        binding.pbFinishEvent.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+    private fun showSearchLoading(isLoading: Boolean) {
+        binding.pbSearch.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {

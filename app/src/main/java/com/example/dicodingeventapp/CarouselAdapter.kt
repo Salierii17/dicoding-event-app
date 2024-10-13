@@ -24,7 +24,6 @@ class CarouselAdapter(
         holder.bind(eventItem)
     }
 
-    //
     override fun getItemCount(): Int {
         return minOf(super.getItemCount(), 5)
     }

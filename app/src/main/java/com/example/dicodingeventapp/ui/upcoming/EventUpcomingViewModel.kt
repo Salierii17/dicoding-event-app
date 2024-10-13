@@ -45,9 +45,6 @@ class EventUpcomingViewModel : ViewModel() {
                 _isLoading.value = false
                 Log.e(TAG, "onFailure: ${t.message}")
             }
-
         })
-
     }
-
 }
