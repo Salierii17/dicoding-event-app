@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.dicodingeventapp.data.response.EventResponse
 import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.data.retrofit.ApiConfig
+import com.example.dicodingeventapp.utils.Event
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,6 +19,9 @@ class HomeViewModel : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _snackBar = MutableLiveData<Event<String>>()
+    val snackBar : LiveData<Event<String>> = _snackBar
 
     companion object {
         private const val TAG = "HomeViewModel"
@@ -38,7 +42,11 @@ class HomeViewModel : ViewModel() {
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
                 _isLoading.value = false
+                val message =
+                    "Unable to connect. Please check your internet connection and try again."
+                _snackBar.value = Event(message)
                 Log.e(TAG, "onFailure: ${t.message}")
+
             }
         })
     }

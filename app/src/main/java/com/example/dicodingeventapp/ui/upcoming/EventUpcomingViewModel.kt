@@ -40,15 +40,20 @@ class EventUpcomingViewModel : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     _listEvent.value = response.body()?.listEvents
-                    _snackBar.value = Event(response.body()?.message.toString())
+//                    _snackBar.value = Event(response.body()?.message.toString())
                 } else {
+                    _snackBar.value = Event(response.message())
                     Log.e(TAG, "Response: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
                 _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message}")
+                val message =
+                    "Unable to connect. Please check your internet connection and try again."
+                _snackBar.value = Event(message)
+                Log.e(TAG, "onFailure: ${t.message.toString()}")
+
             }
         })
     }

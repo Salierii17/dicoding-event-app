@@ -11,8 +11,9 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
-import com.example.dicodingeventapp.data.response.Event
+import com.example.dicodingeventapp.data.response.ListEventsDetailItem
 import com.example.dicodingeventapp.databinding.FragmentEventDetailBinding
+import com.google.android.material.snackbar.Snackbar
 
 class EventDetailFragment : Fragment() {
 
@@ -49,10 +50,19 @@ class EventDetailFragment : Fragment() {
         eventDetailViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
+        eventDetailViewModel.snackBar.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { message ->
+                Snackbar.make(
+                    binding.root,
+                    message,
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
 
     }
 
-    private fun setEventDetailData(eventDetailData: Event) {
+    private fun setEventDetailData(eventDetailData: ListEventsDetailItem) {
         eventDetailData.let { event ->
             with(binding) {
                 Glide.with(root).load(event.imageLogo).into(imgMediaCover)

@@ -17,6 +17,7 @@ import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentHomeBinding
 import com.example.dicodingeventapp.ui.finished.EventFinishedViewModel
 import com.example.dicodingeventapp.ui.upcoming.EventUpcomingViewModel
+import com.example.dicodingeventapp.utils.Event
 import com.google.android.material.snackbar.Snackbar
 
 class HomeFragment : Fragment() {
@@ -90,12 +91,18 @@ class HomeFragment : Fragment() {
         homeViewModel.isLoading.observe(viewLifecycleOwner) {
             showSearchLoading(it)
         }
+        homeViewModel.snackBar.observe(viewLifecycleOwner) {
+            showSnackBar(it)
+        }
 
         eventUpcomingViewModel.listEvent.observe(viewLifecycleOwner) { eventData ->
             setUpcomingEventData(eventData)
         }
         eventUpcomingViewModel.isLoading.observe(viewLifecycleOwner) {
             showUpcomingEventLoading(it)
+        }
+        eventUpcomingViewModel.snackBar.observe(viewLifecycleOwner) {
+            showSnackBar(it)
         }
 
         eventFinishedViewModel.listEvent.observe(viewLifecycleOwner) { eventData ->
@@ -104,7 +111,20 @@ class HomeFragment : Fragment() {
         eventFinishedViewModel.isLoading.observe(viewLifecycleOwner) {
             showFinishedEventLoading(it)
         }
+        eventFinishedViewModel.snackBar.observe(viewLifecycleOwner) {
+            showSnackBar(it)
+        }
 
+    }
+
+    private fun showSnackBar(it: Event<String>) {
+        it.getContentIfNotHandled()?.let { message ->
+            Snackbar.make(
+                binding.root,
+                message,
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun navigateToEventDetail(eventId: Int) {
@@ -138,6 +158,8 @@ class HomeFragment : Fragment() {
     private fun showFinishedEventLoading(isLoading: Boolean) {
         binding.pbFinishEvent.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
+
+
     private fun showSearchLoading(isLoading: Boolean) {
         binding.pbSearch.visibility = if (isLoading) View.VISIBLE else View.GONE
     }

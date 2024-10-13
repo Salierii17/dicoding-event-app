@@ -4,20 +4,24 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.dicodingeventapp.data.response.Event
 import com.example.dicodingeventapp.data.response.EventDetailResponse
+import com.example.dicodingeventapp.data.response.ListEventsDetailItem
 import com.example.dicodingeventapp.data.retrofit.ApiConfig
+import com.example.dicodingeventapp.utils.Event
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class EventDetailViewModel : ViewModel() {
 
-    private val _eventDetail = MutableLiveData<Event>()
-    val eventDetail: LiveData<Event> = _eventDetail
+    private val _eventDetail = MutableLiveData<ListEventsDetailItem>()
+    val eventDetail: LiveData<ListEventsDetailItem> = _eventDetail
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _snackBar = MutableLiveData<Event<String>>()
+    val snackBar: LiveData<Event<String>> = _snackBar
 
     companion object {
         private const val TAG = "EventDetailViewModel"
@@ -34,16 +38,20 @@ class EventDetailViewModel : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     _eventDetail.value = response.body()?.event
+//                    _snackBar.value = Event(response.body()?.message.toString())
                 } else {
+                    _snackBar.value = Event(response.message())
                     Log.e(TAG, "Response: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<EventDetailResponse>, t: Throwable) {
                 _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message}")
+                val message =
+                    "Unable to connect. Please check your internet connection and try again."
+                _snackBar.value = Event(message)
+                Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
-
         })
     }
 }
