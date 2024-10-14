@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide
 import com.example.dicodingeventapp.data.response.ListEventsDetailItem
 import com.example.dicodingeventapp.databinding.FragmentEventDetailBinding
 import com.google.android.material.snackbar.Snackbar
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class EventDetailFragment : Fragment() {
 
@@ -70,8 +72,7 @@ class EventDetailFragment : Fragment() {
                 tvOwnerName.text = event.ownerName
                 val quota = (event.quota - event.registrants).toString()
                 tvQuota.text = quota
-                val eventTime = "${event.beginTime} - ${event.endTime}"
-                tvTime.text = eventTime
+                tvTime.text = formatEventTime(event.beginTime, event.endTime)
                 tvDescription.text = HtmlCompat.fromHtml(
                     event.description,
                     HtmlCompat.FROM_HTML_MODE_LEGACY
@@ -85,6 +86,27 @@ class EventDetailFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun formatEventTime(beginTime: String, endTime: String): String {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val outputDateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+        val outputTimeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+
+        return try {
+            val parsedBeginTime = inputFormat.parse(beginTime)
+            val parsedEndTime = inputFormat.parse(endTime)
+
+            val formattedDate = parsedBeginTime?.let { outputDateFormat.format(it) }
+            val formattedBeginTime = parsedBeginTime?.let { outputTimeFormat.format(it) }
+            val formattedEndTime = parsedEndTime?.let { outputTimeFormat.format(it) }
+
+            "$formattedDate, $formattedBeginTime - $formattedEndTime"
+
+        } catch (e: Exception) {
+            Log.e("EventDetailFragment", "onError : ${e.message.toString()}")
+            "Invalid input format"
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {

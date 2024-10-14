@@ -13,4 +13,7 @@
     <string name="register">Register</string>
     <string name="time">Time</string>
     <string name="quota">Quota</string>
+    <string name="event_organizer">Penyelenggara Acara :</string>
+    <string name="event_time">Waktu Acara :</string>
+    <string name="remaining_quota">Sisa Kuota :</string>
 </resources>
