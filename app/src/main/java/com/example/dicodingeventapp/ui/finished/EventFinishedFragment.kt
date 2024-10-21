@@ -18,7 +18,7 @@ class EventFinishedFragment : Fragment() {
 
     private var _binding: FragmentEventFinishedBinding? = null
 
-    private val binding get() = _binding!!
+    private val binding get() = _binding
 
     private val eventFinishedViewModel by viewModels<EventFinishedViewModel>()
 
@@ -30,7 +30,7 @@ class EventFinishedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEventFinishedBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        val root: View = binding?.root ?: View(requireContext())
         return root
     }
 
@@ -38,7 +38,7 @@ class EventFinishedFragment : Fragment() {
         super.onViewStateRestored(savedInstanceState)
 
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        binding.rvFinishedEvent.layoutManager = layoutManager
+        binding?.rvFinishedEvent?.layoutManager = layoutManager
 
         adapter = EventListAdapter { event ->
             val bundle = Bundle().apply {
@@ -50,7 +50,7 @@ class EventFinishedFragment : Fragment() {
             )
         }
 
-        binding.rvFinishedEvent.adapter = adapter
+        binding?.rvFinishedEvent?.adapter = adapter
 
         eventFinishedViewModel.listEvent.observe(viewLifecycleOwner) { eventData ->
             setEventData(eventData)
@@ -61,7 +61,7 @@ class EventFinishedFragment : Fragment() {
         eventFinishedViewModel.snackBar.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { message ->
                 Snackbar.make(
-                    binding.root,
+                    requireView(),
                     message,
                     Snackbar.LENGTH_SHORT
                 ).show()
@@ -74,7 +74,7 @@ class EventFinishedFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding?.progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {

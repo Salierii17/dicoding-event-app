@@ -24,7 +24,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-    private val binding get() = _binding!!
+    private val binding get() = _binding
 
     private val eventUpcomingViewModel by viewModels<EventUpcomingViewModel>()
     private val eventFinishedViewModel by viewModels<EventFinishedViewModel>()
@@ -42,17 +42,17 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        val root: View = binding?.root ?: View(requireContext())
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
 
-        binding.rvSearchResult.layoutManager = LinearLayoutManager(context)
-        binding.rvUpcomingEvent.layoutManager =
+        binding?.rvSearchResult?.layoutManager = LinearLayoutManager(context)
+        binding?.rvUpcomingEvent?.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvFinishedEvent.layoutManager =
+        binding?.rvFinishedEvent?.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         searchAdapter = SearchAdapter { eventItem ->
@@ -65,22 +65,24 @@ class HomeFragment : Fragment() {
             navigateToEventDetail(eventItem.id)
         }
 
-        binding.rvSearchResult.adapter = searchAdapter
-        binding.rvUpcomingEvent.adapter = upcomingEventListAdapter
-        binding.rvFinishedEvent.adapter = finishedEventListAdapter
+        binding?.rvSearchResult?.adapter = searchAdapter
+        binding?.rvUpcomingEvent?.adapter = upcomingEventListAdapter
+        binding?.rvFinishedEvent?.adapter = finishedEventListAdapter
 
-        with(binding) {
-            searchView.setupWithSearchBar(searchBar)
-            searchView.editText.setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    val query = searchView.text.toString()
-                    searchBar.setText(query)
-                    homeViewModel.search(query)
-                    rvSearchResult.visibility = View.VISIBLE
-                    Snackbar.make(view, query, Toast.LENGTH_SHORT).show()
-                    true
-                } else {
-                    false
+        binding?.let { binding ->
+            with(binding) {
+                searchView.setupWithSearchBar(searchBar)
+                searchView.editText.setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        val query = searchView.text.toString()
+                        searchBar.setText(query)
+                        homeViewModel.search(query)
+                        rvSearchResult.visibility = View.VISIBLE
+                        Snackbar.make(view, query, Toast.LENGTH_SHORT).show()
+                        true
+                    } else {
+                        false
+                    }
                 }
             }
         }
@@ -120,7 +122,7 @@ class HomeFragment : Fragment() {
     private fun showSnackBar(it: Event<String>) {
         it.getContentIfNotHandled()?.let { message ->
             Snackbar.make(
-                binding.root,
+                requireView(),
                 message,
                 Snackbar.LENGTH_SHORT
             ).show()
@@ -137,9 +139,9 @@ class HomeFragment : Fragment() {
     private fun setSearchResultData(eventData: List<ListEventsItem>) {
         if (eventData.isNotEmpty()) {
             searchAdapter.submitList(eventData)
-            binding.rvSearchResult.visibility = View.VISIBLE
+            binding?.rvSearchResult?.visibility = View.VISIBLE
         } else {
-            binding.rvSearchResult.visibility = View.GONE
+            binding?.rvSearchResult?.visibility = View.GONE
         }
     }
 
@@ -152,16 +154,16 @@ class HomeFragment : Fragment() {
     }
 
     private fun showUpcomingEventLoading(isLoading: Boolean) {
-        binding.pbUpcomingEvent.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding?.pbUpcomingEvent?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun showFinishedEventLoading(isLoading: Boolean) {
-        binding.pbFinishEvent.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding?.pbFinishEvent?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 
     private fun showSearchLoading(isLoading: Boolean) {
-        binding.pbSearch.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding?.pbSearch?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {

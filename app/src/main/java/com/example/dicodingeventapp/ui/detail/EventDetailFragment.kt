@@ -21,7 +21,7 @@ class EventDetailFragment : Fragment() {
 
     private var _binding: FragmentEventDetailBinding? = null
 
-    private val binding get() = _binding!!
+    private val binding get() = _binding
 
     private val eventDetailViewModel: EventDetailViewModel by viewModels()
 
@@ -30,7 +30,7 @@ class EventDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEventDetailBinding.inflate(layoutInflater, container, false)
-        val view = binding.root
+        val view = binding?.root ?: View(requireContext())
         return view
     }
 
@@ -55,7 +55,7 @@ class EventDetailFragment : Fragment() {
         eventDetailViewModel.snackBar.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { message ->
                 Snackbar.make(
-                    binding.root,
+                    requireView(),
                     message,
                     Snackbar.LENGTH_SHORT
                 ).show()
@@ -66,26 +66,27 @@ class EventDetailFragment : Fragment() {
 
     private fun setEventDetailData(eventDetailData: ListEventsDetailItem) {
         eventDetailData.let { event ->
-            with(binding) {
-                Glide.with(root).load(event.imageLogo).into(imgMediaCover)
-                tvName.text = event.name
-                tvOwnerName.text = event.ownerName
-                val quota = (event.quota - event.registrants).toString()
-                tvQuota.text = quota
-                tvTime.text = formatEventTime(event.beginTime, event.endTime)
-                tvDescription.text = HtmlCompat.fromHtml(
-                    event.description,
-                    HtmlCompat.FROM_HTML_MODE_LEGACY
-                )
-                btnLink.setOnClickListener {
-                    val url = event.link
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(url)
-                    startActivity(intent)
+            binding?.let { binding ->
+                with(binding) {
+                    Glide.with(root).load(event.imageLogo).into(imgMediaCover)
+                    tvName.text = event.name
+                    tvOwnerName.text = event.ownerName
+                    val quota = (event.quota - event.registrants).toString()
+                    tvQuota.text = quota
+                    tvTime.text = formatEventTime(event.beginTime, event.endTime)
+                    tvDescription.text = HtmlCompat.fromHtml(
+                        event.description,
+                        HtmlCompat.FROM_HTML_MODE_LEGACY
+                    )
+                    btnLink.setOnClickListener {
+                        val url = event.link
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.data = Uri.parse(url)
+                        startActivity(intent)
+                    }
                 }
             }
         }
-
     }
 
     private fun formatEventTime(beginTime: String, endTime: String): String {
@@ -110,7 +111,7 @@ class EventDetailFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding?.progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 }
