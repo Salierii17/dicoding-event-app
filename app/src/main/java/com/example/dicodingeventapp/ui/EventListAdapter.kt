@@ -1,16 +1,17 @@
-package com.example.dicodingeventapp
+package com.example.dicodingeventapp.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.dicodingeventapp.data.response.ListEventsItem
+import com.example.dicodingeventapp.data.local.EventEntity
 import com.example.dicodingeventapp.databinding.ItemEventBinding
 
-class EventListAdapter(private val onClick: (ListEventsItem) -> Unit) :
-    ListAdapter<ListEventsItem, EventListAdapter.EventViewHolder>(DIFF_CALLBACK) {
+class EventListAdapter(private val onClick: (EventEntity) -> Unit) :
+    ListAdapter<EventEntity, EventListAdapter.EventViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -24,12 +25,14 @@ class EventListAdapter(private val onClick: (ListEventsItem) -> Unit) :
 
     class EventViewHolder(
         private var binding: ItemEventBinding,
-        val onClick: (ListEventsItem) -> Unit
+        val onClick: (EventEntity) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(eventItem: ListEventsItem) {
-            Glide.with(binding.root).load(eventItem.mediaCover).into(binding.imgMediaCover)
+        fun bind(eventItem: EventEntity) {
             binding.tvName.text = eventItem.name
+            Glide.with(itemView.context)
+                .load(eventItem.mediaCover)
+                .into(binding.imgMediaCover)
 
             itemView.setOnClickListener {
                 onClick(eventItem)
@@ -38,17 +41,18 @@ class EventListAdapter(private val onClick: (ListEventsItem) -> Unit) :
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListEventsItem>() {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<EventEntity>() {
             override fun areItemsTheSame(
-                oldItem: ListEventsItem,
-                newItem: ListEventsItem
+                oldItem: EventEntity,
+                newItem: EventEntity
             ): Boolean {
                 return oldItem == newItem
             }
 
+            @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(
-                oldItem: ListEventsItem,
-                newItem: ListEventsItem
+                oldItem: EventEntity,
+                newItem: EventEntity
             ): Boolean {
                 return oldItem == newItem
             }

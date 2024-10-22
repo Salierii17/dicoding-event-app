@@ -8,11 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.dicodingeventapp.EventListAdapter
+import com.example.dicodingeventapp.ui.EventListAdapter
 import com.example.dicodingeventapp.R
-import com.example.dicodingeventapp.data.response.ListEventsItem
+import com.example.dicodingeventapp.data.Result
 import com.example.dicodingeventapp.databinding.FragmentEventFinishedBinding
-import com.google.android.material.snackbar.Snackbar
+import com.example.dicodingeventapp.ui.ViewModelFactory
+import com.example.dicodingeventapp.ui.EventViewModel
 
 class EventFinishedFragment : Fragment() {
 
@@ -20,61 +21,60 @@ class EventFinishedFragment : Fragment() {
 
     private val binding get() = _binding
 
-    private val eventFinishedViewModel by viewModels<EventFinishedViewModel>()
-
-    private lateinit var adapter: EventListAdapter
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         _binding = FragmentEventFinishedBinding.inflate(inflater, container, false)
-        val root: View = binding?.root ?: View(requireContext())
-        return root
+        return binding?.root
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
 
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        binding?.rvFinishedEvent?.layoutManager = layoutManager
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(requireActivity())
+        val viewModel: EventViewModel by viewModels {
+            factory
+        }
 
-        adapter = EventListAdapter { event ->
+        val eventAdapter = EventListAdapter { eventItem ->
             val bundle = Bundle().apply {
-                putInt("event_id", event.id)
+                putInt("event_id", eventItem.eventId.toInt())
             }
             findNavController().navigate(
-                R.id.action_navigation_finished_to_eventDetailFragment,
+                R.id.action_navigation_upcoming_to_eventDetailFragment,
                 bundle
             )
         }
 
-        binding?.rvFinishedEvent?.adapter = adapter
+        viewModel.fetchEvent(0).observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> {
+                        binding?.progressBar?.visibility = View.VISIBLE
+                    }
 
-        eventFinishedViewModel.listEvent.observe(viewLifecycleOwner) { eventData ->
-            setEventData(eventData)
-        }
-        eventFinishedViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
-        eventFinishedViewModel.snackBar.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { message ->
-                Snackbar.make(
-                    requireView(),
-                    message,
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                    is Result.Success -> {
+                        binding?.progressBar?.visibility = View.GONE
+                        val eventData = result.data
+                        eventAdapter.submitList(eventData)
+                    }
+
+                    is Result.Error -> {
+                        binding?.progressBar?.visibility = View.GONE
+
+                    }
+                }
             }
         }
-    }
 
-    private fun setEventData(eventData: List<ListEventsItem>?) {
-        adapter.submitList(eventData)
-    }
+        binding?.rvFinishedEvent?.apply {
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            setHasFixedSize(true)
+            adapter = eventAdapter
+        }
 
-    private fun showLoading(isLoading: Boolean) {
-        binding?.progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {

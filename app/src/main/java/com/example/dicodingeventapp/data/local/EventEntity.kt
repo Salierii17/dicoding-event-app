@@ -1,41 +1,26 @@
 package com.example.dicodingeventapp.data.local
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "events")
-class EventEntity(
+@Parcelize
+data class EventEntity(
 
-    @PrimaryKey(true)
-    @ColumnInfo(name = "eventId")
+    @PrimaryKey(false)
+    @ColumnInfo(name = "id")
     var eventId: String,
 
     @ColumnInfo(name = "name")
-    var name: String? = null,
+    var name: String = "",
 
-    @ColumnInfo(name = "ownerName")
+    @ColumnInfo(name = "mediaCover")
     var mediaCover: String? = null,
 
-    @ColumnInfo(name = "description")
-    var description: String? = null,
-
-    @ColumnInfo(name = "ownerName")
-    var ownerName: String? = null,
-
-    @ColumnInfo("quota")
-    var quota: Int = 0,
-
-    @ColumnInfo("registrant")
-    var registrant: Int = 0,
-
-    @ColumnInfo(name = "beginTime")
-    var beginTime: String? = null,
-
-    @ColumnInfo(name = "endTime")
-    var endTime: String? = null,
-
-    @ColumnInfo(name = "isActive")
+    @ColumnInfo(name = "active")
     var isActive: Boolean = false,
 
-    )
+    ) : Parcelable

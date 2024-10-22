@@ -30,25 +30,30 @@ class EventRepository private constructor(
             }.also { instance = it }
     }
 
-    suspend fun getEvents(isActive: Int): LiveData<Result<List<EventEntity>>> = liveData {
+    fun getEvents(isActive: Int): LiveData<Result<List<EventEntity>>> = liveData {
         emit(Result.Loading)
         try {
             val response = apiService.getEvent(isActive)
-            val event = response.listEvents
-            val eventList = event.map { event ->
+            val events = response.listEvents
+            val eventsList = events.map { event ->
                 EventEntity(
-                    event.name,
-                    event.mediaCover,
+                    eventId = event.id.toString(),
+                    name = event.name,
+                    mediaCover = event.mediaCover,
+                    isActive = isActive == 1
                 )
             }
+            eventDao.insertEvents(eventsList)
+            emit(Result.Success(eventsList))
         } catch (e: Exception) {
             Log.e(TAG, "getActiveEvent: ${e.message.toString()}")
             emit(Result.Error(e.message.toString()))
         }
         val localData: LiveData<Result<List<EventEntity>>> =
-            eventDao.getActiveEvent(isActive).map { Result.Success(it) }
+            eventDao.getEvent(isActive).map { Result.Success(it) }
         emitSource(localData)
     }
 
+    suspend fun insert(event: List<EventEntity>) = eventDao.insertEvents(event)
 
 }
