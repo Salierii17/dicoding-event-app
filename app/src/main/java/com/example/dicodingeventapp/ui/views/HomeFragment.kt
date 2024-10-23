@@ -45,14 +45,14 @@ class HomeFragment : Fragment() {
         }
 
         val eventActiveAdapter = CarouselAdapter { eventItem ->
-            navigateToEventDetail(eventItem.eventId.toInt())
+            navigateToEventDetail(eventItem.eventId.toInt(), eventItem)
         }
         val eventFinishAdapter = CarouselAdapter { eventItem ->
-            navigateToEventDetail(eventItem.eventId.toInt())
+            navigateToEventDetail(eventItem.eventId.toInt(), eventItem)
         }
 
         val searchAdapter = SearchAdapter { eventItem ->
-            navigateToEventDetail(eventItem.eventId.toInt())
+            navigateToEventDetail(eventItem.eventId.toInt(), eventItem)
         }
 
         // Fetch Active Event
@@ -131,9 +131,10 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun navigateToEventDetail(eventId: Int) {
+    private fun navigateToEventDetail(eventId: Int, eventItem: EventEntity) {
         val bundle = Bundle().apply {
             putInt("event_id", eventId)
+            putParcelable("book_item", eventItem)
         }
         findNavController().navigate(R.id.action_navigation_home_to_eventDetailFragment, bundle)
     }

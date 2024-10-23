@@ -41,6 +41,7 @@ class EventUpcomingFragment : Fragment() {
         val eventAdapter = EventListAdapter { eventItem ->
             val bundle = Bundle().apply {
                 putInt("event_id", eventItem.eventId.toInt())
+                putParcelable("book_item", eventItem)
             }
             findNavController().navigate(
                 R.id.action_navigation_upcoming_to_eventDetailFragment,

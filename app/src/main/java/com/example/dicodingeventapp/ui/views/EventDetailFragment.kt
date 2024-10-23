@@ -7,15 +7,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.local.EventEntity
 import com.example.dicodingeventapp.data.response.ListEventsDetailItem
 import com.example.dicodingeventapp.databinding.FragmentEventDetailBinding
 import com.example.dicodingeventapp.ui.viewmodel.EventDetailViewModel
-import com.example.dicodingeventapp.ui.viewmodel.EventViewModel
 import com.example.dicodingeventapp.ui.viewmodel.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
@@ -46,6 +48,9 @@ class EventDetailFragment : Fragment(), View.OnClickListener {
         }
 
         val eventID = arguments?.getInt("event_id", 0)
+        eventItem = arguments?.getParcelable("book_item")!!
+
+
 
         if (eventID != null && eventID != -1) {
             viewModel.fetchEventDetail(eventID)
@@ -56,12 +61,9 @@ class EventDetailFragment : Fragment(), View.OnClickListener {
         viewModel.eventDetail.observe(viewLifecycleOwner) { eventDetailData ->
             setEventDetailData(eventDetailData)
         }
-
         viewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
-
-
         viewModel.snackBar.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { message ->
                 Snackbar.make(
@@ -74,7 +76,10 @@ class EventDetailFragment : Fragment(), View.OnClickListener {
 
         binding?.btnFavorite?.setOnClickListener {
             viewModel.addEventToFavorites(eventItem)
+            Toast.makeText(context, "Event added to Favorites", Toast.LENGTH_SHORT).show()
         }
+
+        updateFavoriteButton(eventItem.isFavorite)
     }
 
     private fun setEventDetailData(eventDetailData: ListEventsDetailItem) {
@@ -125,6 +130,13 @@ class EventDetailFragment : Fragment(), View.OnClickListener {
 
     private fun showLoading(isLoading: Boolean) {
         binding?.progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+
+    private fun updateFavoriteButton(isFavorite: Boolean) {
+        val drawableRes =
+            if (isFavorite) R.drawable.ic_favorite_24 else R.drawable.ic_favorite_border_24
+        binding?.btnFavorite?.setImageResource(drawableRes)
     }
 
     override fun onClick(v: View?) {
