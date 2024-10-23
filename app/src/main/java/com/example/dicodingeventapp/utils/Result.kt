@@ -1,4 +1,4 @@
-package com.example.dicodingeventapp.data
+package com.example.dicodingeventapp.utils
 
 sealed class Result<out R> private constructor() {
     data class Success<out T>(val data: T) : Result<T>()

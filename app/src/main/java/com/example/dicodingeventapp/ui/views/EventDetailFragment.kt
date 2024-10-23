@@ -1,4 +1,4 @@
-package com.example.dicodingeventapp.ui.detail
+package com.example.dicodingeventapp.ui.views
 
 import android.content.Intent
 import android.net.Uri
@@ -11,48 +11,58 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.example.dicodingeventapp.data.local.EventEntity
 import com.example.dicodingeventapp.data.response.ListEventsDetailItem
 import com.example.dicodingeventapp.databinding.FragmentEventDetailBinding
+import com.example.dicodingeventapp.ui.viewmodel.EventDetailViewModel
+import com.example.dicodingeventapp.ui.viewmodel.EventViewModel
+import com.example.dicodingeventapp.ui.viewmodel.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class EventDetailFragment : Fragment() {
+class EventDetailFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentEventDetailBinding? = null
 
     private val binding get() = _binding
 
-    private val eventDetailViewModel: EventDetailViewModel by viewModels()
+    private lateinit var eventItem: EventEntity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         _binding = FragmentEventDetailBinding.inflate(layoutInflater, container, false)
-        val view = binding?.root ?: View(requireContext())
-        return view
+        return binding?.root
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val factory = ViewModelFactory.getInstance(requireActivity())
+        val viewModel: EventDetailViewModel by viewModels {
+            factory
+        }
 
         val eventID = arguments?.getInt("event_id", 0)
 
         if (eventID != null && eventID != -1) {
-            eventDetailViewModel.fetchEventDetail(eventID)
+            viewModel.fetchEventDetail(eventID)
         } else {
             Log.e("EventDetailFragment", "Event ID is Null")
         }
 
-        eventDetailViewModel.eventDetail.observe(viewLifecycleOwner) { eventDetailData ->
+        viewModel.eventDetail.observe(viewLifecycleOwner) { eventDetailData ->
             setEventDetailData(eventDetailData)
         }
 
-        eventDetailViewModel.isLoading.observe(viewLifecycleOwner) {
+        viewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
-        eventDetailViewModel.snackBar.observe(viewLifecycleOwner) {
+
+
+        viewModel.snackBar.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { message ->
                 Snackbar.make(
                     requireView(),
@@ -62,6 +72,9 @@ class EventDetailFragment : Fragment() {
             }
         }
 
+        binding?.btnFavorite?.setOnClickListener {
+            viewModel.addEventToFavorites(eventItem)
+        }
     }
 
     private fun setEventDetailData(eventDetailData: ListEventsDetailItem) {
@@ -112,6 +125,9 @@ class EventDetailFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding?.progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    override fun onClick(v: View?) {
     }
 
 }

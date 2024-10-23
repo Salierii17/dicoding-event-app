@@ -1,6 +1,5 @@
-package com.example.dicodingeventapp.ui
+package com.example.dicodingeventapp.ui.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,13 +7,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dicodingeventapp.data.local.EventEntity
-import com.example.dicodingeventapp.databinding.ItemEventBinding
+import com.example.dicodingeventapp.databinding.ItemSearchLayoutBinding
 
-class EventListAdapter(private val onClick: (EventEntity) -> Unit) :
-    ListAdapter<EventEntity, EventListAdapter.EventViewHolder>(DIFF_CALLBACK) {
+class SearchAdapter(private val onClick: (EventEntity) -> Unit) :
+    ListAdapter<EventEntity, SearchAdapter.EventViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
-        val view = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view =
+            ItemSearchLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return EventViewHolder(view, onClick)
     }
 
@@ -24,15 +24,13 @@ class EventListAdapter(private val onClick: (EventEntity) -> Unit) :
     }
 
     class EventViewHolder(
-        private var binding: ItemEventBinding,
+        private var binding: ItemSearchLayoutBinding,
         val onClick: (EventEntity) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(eventItem: EventEntity) {
+            Glide.with(binding.root).load(eventItem.mediaCover).into(binding.imgMediaCover)
             binding.tvName.text = eventItem.name
-            Glide.with(itemView.context)
-                .load(eventItem.mediaCover)
-                .into(binding.imgMediaCover)
 
             itemView.setOnClickListener {
                 onClick(eventItem)
@@ -49,15 +47,12 @@ class EventListAdapter(private val onClick: (EventEntity) -> Unit) :
                 return oldItem == newItem
             }
 
-            @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(
                 oldItem: EventEntity,
                 newItem: EventEntity
             ): Boolean {
                 return oldItem == newItem
             }
-
         }
-
     }
 }

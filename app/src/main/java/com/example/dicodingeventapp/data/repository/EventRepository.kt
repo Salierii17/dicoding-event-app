@@ -1,4 +1,4 @@
-package com.example.dicodingeventapp.data
+package com.example.dicodingeventapp.data.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,13 +6,12 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import com.example.dicodingeventapp.data.local.EventDao
 import com.example.dicodingeventapp.data.local.EventEntity
-import com.example.dicodingeventapp.data.retrofit.ApiService
-import com.example.dicodingeventapp.utils.AppExecutors
+import com.example.dicodingeventapp.data.remote.ApiService
+import com.example.dicodingeventapp.utils.Result
 
 class EventRepository private constructor(
     private val apiService: ApiService,
     private val eventDao: EventDao,
-    private val appExecutor: AppExecutors
 ) {
     companion object {
 
@@ -23,10 +22,9 @@ class EventRepository private constructor(
         fun getInstance(
             apiService: ApiService,
             newsDao: EventDao,
-            appExecutors: AppExecutors
         ): EventRepository =
             instance ?: synchronized(this) {
-                instance ?: EventRepository(apiService, newsDao, appExecutors)
+                instance ?: EventRepository(apiService, newsDao)
             }.also { instance = it }
     }
 
@@ -34,15 +32,18 @@ class EventRepository private constructor(
         emit(Result.Loading)
         try {
             val response = apiService.getEvent(isActive)
-            val events = response.listEvents
-            val eventsList = events.map { event ->
+            val listEvents = response.listEvents
+            val eventsList = listEvents.map { listEvent ->
+                val isFavorite = eventDao.isEventFavorite(listEvent.id)
                 EventEntity(
-                    eventId = event.id.toString(),
-                    name = event.name,
-                    mediaCover = event.mediaCover,
-                    isActive = isActive == 1
+                    eventId = listEvent.id.toString(),
+                    name = listEvent.name,
+                    mediaCover = listEvent.mediaCover,
+                    isActive = isActive == 1,
+                    isFavorite
                 )
             }
+//            eventDao.deleteAll()
             eventDao.insertEvents(eventsList)
             emit(Result.Success(eventsList))
         } catch (e: Exception) {
@@ -54,6 +55,14 @@ class EventRepository private constructor(
         emitSource(localData)
     }
 
-    suspend fun insert(event: List<EventEntity>) = eventDao.insertEvents(event)
+    fun getFavoriteEvents(id: String): LiveData<List<EventEntity>> {
+        return eventDao.getFavoriteEventById(id)
+    }
+
+    suspend fun setEventFavorite(events: EventEntity, favoriteState: Boolean) {
+        events.isFavorite = favoriteState
+        eventDao.updateEvents(events)
+    }
+
 
 }

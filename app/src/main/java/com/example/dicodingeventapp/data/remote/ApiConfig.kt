@@ -1,4 +1,4 @@
-package com.example.dicodingeventapp.data.retrofit
+package com.example.dicodingeventapp.data.remote
 
 import com.example.dicodingeventapp.BuildConfig
 import okhttp3.OkHttpClient
@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ApiConfig {
 
     companion object {
-        private val BASE_URL = BuildConfig.BASE_URL
+        private const val BASE_URL = BuildConfig.BASE_URL
         fun getApiService(): ApiService {
             val loggingInterceptor = HttpLoggingInterceptor().setLevel(
                 HttpLoggingInterceptor.Level.BODY

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.views.HomeFragment">
 
     <com.google.android.material.search.SearchBar
         android:id="@+id/searchBar"
@@ -112,22 +112,24 @@
                 android:id="@+id/pbUpcomingEvent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/rvUpcomingEvent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/rvUpcomingEvent" />
+                app:layout_constraintTop_toTopOf="@+id/rvUpcomingEvent"
+                tools:visibility="visible" />
 
             <ProgressBar
                 android:id="@+id/pbFinishEvent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/rvFinishedEvent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/rvFinishedEvent" />
+                app:layout_constraintTop_toTopOf="@+id/rvFinishedEvent"
+                tools:visibility="visible" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

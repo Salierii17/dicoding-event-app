@@ -1,4 +1,4 @@
-package com.example.dicodingeventapp.data.retrofit
+package com.example.dicodingeventapp.data.remote
 
 import com.example.dicodingeventapp.data.response.EventDetailResponse
 import com.example.dicodingeventapp.data.response.EventResponse

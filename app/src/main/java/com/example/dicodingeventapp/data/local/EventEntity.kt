@@ -23,4 +23,7 @@ data class EventEntity(
     @ColumnInfo(name = "active")
     var isActive: Boolean = false,
 
+    @field:ColumnInfo(name = "favorite")
+    var isFavorite: Boolean
+
     ) : Parcelable

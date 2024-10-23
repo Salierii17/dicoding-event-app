@@ -16,4 +16,5 @@
     <string name="event_organizer">Penyelenggara Acara :</string>
     <string name="event_time">Waktu Acara :</string>
     <string name="remaining_quota">Sisa Kuota :</string>
+    <string name="favorite">Favorite</string>
 </resources>
