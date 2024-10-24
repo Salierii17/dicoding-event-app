@@ -1,9 +1,9 @@
 package com.example.dicodingeventapp.ui
 
 import android.os.Bundle
-import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,8 +11,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.databinding.ActivityMainBinding
+import com.example.dicodingeventapp.ui.settings.SettingsPreferences
+import com.example.dicodingeventapp.ui.settings.SettingsViewModel
+import com.example.dicodingeventapp.ui.settings.dataStore
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.switchmaterial.SwitchMaterial
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         val navView: BottomNavigationView = binding.navView
 
@@ -38,12 +41,25 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_upcoming,
                 R.id.navigation_finished,
                 R.id.navigation_favorite,
-                R.id.navigation_option
+                R.id.navigation_settings
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+
+        SettingsPreferences.getInstance(application.dataStore)
+        val settingViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory.getInstance(this)
+        )[SettingsViewModel::class.java]
+
+        settingViewModel.getThemeSettings().observe(this) { isDarkModeActive ->
+            AppCompatDelegate.setDefaultNightMode(
+                if (isDarkModeActive) AppCompatDelegate.MODE_NIGHT_YES
+                else AppCompatDelegate.MODE_NIGHT_NO
+            )
+        }
 
     }
 
@@ -51,5 +67,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
+
 
 }

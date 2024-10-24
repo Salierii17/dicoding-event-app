@@ -15,7 +15,7 @@ import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.local.EventEntity
 import com.example.dicodingeventapp.databinding.FragmentHomeBinding
 import com.example.dicodingeventapp.ui.CarouselAdapter
-import com.example.dicodingeventapp.ui.adapter.SearchAdapter
+import com.example.dicodingeventapp.ui.SearchAdapter
 import com.example.dicodingeventapp.ui.EventViewModel
 import com.example.dicodingeventapp.ui.ViewModelFactory
 import com.example.dicodingeventapp.utils.Event

@@ -22,8 +22,8 @@
         android:title="@string/favorite" />
 
     <item
-        android:id="@+id/navigation_option"
+        android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings_24px"
-        android:title="@string/option" />
+        android:title="@string/settings" />
 
 </menu>
