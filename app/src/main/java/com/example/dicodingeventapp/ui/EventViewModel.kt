@@ -24,8 +24,15 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
     fun fetchEvent(isActive: Int) = repository.getEvents(isActive)
 
+    fun fetchEventDetail(id: Int) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            _isLoading.value = false
+            val detailEvent = repository.fetchEventDetail(id).event
+            _eventDetail.value = detailEvent
+        }
+    }
     fun getFavoriteEvent() = repository.getFavoriteEvents()
-    fun getListFavoriteEvent() = repository.getListFavoriteEvents()
 
     fun saveEvents(event: EventEntity) {
         viewModelScope.launch {
@@ -36,15 +43,6 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
     fun deleteEvents(event: EventEntity) {
         viewModelScope.launch {
             repository.setEventFavorite(event, false)
-        }
-    }
-
-    fun fetchEventDetail(id: Int) {
-        _isLoading.value = true
-        viewModelScope.launch {
-            _isLoading.value = false
-            val eventList = repository.fetchEvent(id).event
-            _eventDetail.value = eventList
         }
     }
 

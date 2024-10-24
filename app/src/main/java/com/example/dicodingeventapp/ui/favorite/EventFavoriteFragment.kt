@@ -38,12 +38,6 @@ class EventFavoriteFragment : Fragment() {
         }
 
         val eventAdapter = EventListAdapter { eventItem ->
-            if (eventItem.isFavorite) {
-                viewModel.deleteEvents(eventItem)
-            } else {
-                viewModel.saveEvents(eventItem)
-            }
-
             val bundle = Bundle().apply {
                 putInt("event_id", eventItem.eventId.toInt())
                 putParcelable("event_item", eventItem)
@@ -54,12 +48,14 @@ class EventFavoriteFragment : Fragment() {
             )
         }
 
-        viewModel.getListFavoriteEvent().observe(viewLifecycleOwner) { event ->
-            eventAdapter.submitList(event)
-        }
+        viewModel.getFavoriteEvent().observe(viewLifecycleOwner) { event ->
+            if (event.isEmpty()) {
+                binding?.tvFavoriteEvent?.visibility = View.VISIBLE
+            } else {
+                binding?.tvFavoriteEvent?.visibility = View.GONE
+                eventAdapter.submitList(event)
 
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
+            }
         }
 
         binding?.rvFavoriteEvent?.apply {
@@ -67,9 +63,5 @@ class EventFavoriteFragment : Fragment() {
             setHasFixedSize(true)
             adapter = eventAdapter
         }
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding?.progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

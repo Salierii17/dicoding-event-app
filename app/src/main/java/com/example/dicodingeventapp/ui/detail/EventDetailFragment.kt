@@ -47,16 +47,10 @@ class EventDetailFragment : Fragment() {
         val viewModel: EventViewModel by viewModels {
             factory
         }
-        if (eventId != -1) {
-            viewModel.fetchEventDetail(eventId)
-        }
-        viewModel.getFavoriteEvent().observe(viewLifecycleOwner) {
-            if (it != null) {
-                eventItem = it
-            }
-        }
 
-    viewModel.eventDetail.observe(viewLifecycleOwner) { eventDetailData ->
+        viewModel.fetchEventDetail(eventId)
+
+        viewModel.eventDetail.observe(viewLifecycleOwner) { eventDetailData ->
             eventDetailData.let {
                 eventItem = EventEntity(
                     eventId = it.id.toString(),
@@ -66,7 +60,7 @@ class EventDetailFragment : Fragment() {
                     isFavorite = passedEventData.isFavorite
                 )
                 setEventDetailData(eventDetailData)
-                toggleFavorite(eventItem.isFavorite)
+                toggleFavorite(!eventItem.isFavorite)
             }
         }
         viewModel.isLoading.observe(viewLifecycleOwner) {
@@ -84,9 +78,12 @@ class EventDetailFragment : Fragment() {
         }
 
         binding?.btnFavorite?.setOnClickListener {
-            eventItem.isFavorite = !eventItem.isFavorite  // Toggle the state
-            viewModel.saveEvents(eventItem)
             toggleFavorite(eventItem.isFavorite)
+            if (!eventItem.isFavorite) {
+                viewModel.saveEvents(eventItem)
+            } else {
+                viewModel.deleteEvents(eventItem)
+            }
         }
 
     }
@@ -139,7 +136,7 @@ class EventDetailFragment : Fragment() {
     }
 
     private fun toggleFavorite(isFavorite: Boolean) {
-        binding?.btnFavorite?.setImageResource(if (isFavorite) R.drawable.ic_favorite_24 else R.drawable.ic_favorite_border_24)
+        binding?.btnFavorite?.setImageResource(if (!isFavorite) R.drawable.ic_favorite_24 else R.drawable.ic_favorite_border_24)
     }
 
 }

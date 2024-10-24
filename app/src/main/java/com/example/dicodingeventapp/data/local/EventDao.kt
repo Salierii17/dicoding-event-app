@@ -2,7 +2,6 @@ package com.example.dicodingeventapp.data.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -18,11 +17,7 @@ interface EventDao {
     suspend fun insertEvents(events: List<EventEntity>)
 
     @Query("SELECT * FROM events WHERE favorite = 1")
-    fun getFavoriteEvent(): LiveData<EventEntity>
-
-    @Query("SELECT * FROM events WHERE favorite = 1")
-    fun getListFavoriteEvent(): LiveData<List<EventEntity>>
-
+    fun getFavoriteEvent(): LiveData<List<EventEntity>>
 
     @Update
     suspend fun updateEvents(events: EventEntity)

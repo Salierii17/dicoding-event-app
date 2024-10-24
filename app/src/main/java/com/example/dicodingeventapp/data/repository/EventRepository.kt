@@ -54,17 +54,13 @@ class EventRepository private constructor(
             eventDao.getEvent(isActive).map { Result.Success(it) }
         emitSource(localData)
     }
-    fun getFavoriteEvents(): LiveData<EventEntity> {
-        return eventDao.getFavoriteEvent()
-    }
 
-    fun getListFavoriteEvents(): LiveData<List<EventEntity>> {
-        return eventDao.getListFavoriteEvent()
-    }
-
-
-    suspend fun fetchEvent(id: Int): EventDetailResponse {
+    suspend fun fetchEventDetail(id: Int): EventDetailResponse {
         return apiService.getDetailEvent(id)
+    }
+
+    fun getFavoriteEvents(): LiveData<List<EventEntity>> {
+        return eventDao.getFavoriteEvent()
     }
 
     suspend fun setEventFavorite(events: EventEntity, favoriteState: Boolean) {

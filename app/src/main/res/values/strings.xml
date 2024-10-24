@@ -17,4 +17,5 @@
     <string name="event_time">Waktu Acara :</string>
     <string name="remaining_quota">Sisa Kuota :</string>
     <string name="favorite">Favorite</string>
+    <string name="no_favorite_events">No favorite events</string>
 </resources>
