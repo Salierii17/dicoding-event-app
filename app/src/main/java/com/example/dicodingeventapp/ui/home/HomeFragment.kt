@@ -148,7 +148,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun showSnackBar(it: Event<String>) {
+private fun showSnackBar(it: Event<String>) {
         it.getContentIfNotHandled()?.let { message ->
             Snackbar.make(
                 requireView(),

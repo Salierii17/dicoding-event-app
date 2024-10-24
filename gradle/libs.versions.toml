@@ -1,6 +1,7 @@
 [versions]
 agp = "8.4.2"
 compiler = "4.15.1"
+datastorePreferences = "1.1.1"
 glide = "4.16.0"
 kotlin = "1.9.22"
 coreKtx = "1.13.1"
@@ -25,6 +26,7 @@ roomKtx = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
