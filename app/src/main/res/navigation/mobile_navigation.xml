@@ -48,4 +48,9 @@
             android:id="@+id/action_eventFavoriteFragment_to_eventDetailFragment"
             app:destination="@id/navigation_detail" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_option"
+        android:name="com.example.dicodingeventapp.optionFragment"
+        android:label="@string/option"
+        tools:layout="@layout/fragment_option" />
 </navigation>

@@ -9,16 +9,21 @@
     <item
         android:id="@+id/navigation_upcoming"
         android:icon="@drawable/ic_event_24"
-
         android:title="@string/title_upcoming" />
 
     <item
         android:id="@+id/navigation_finished"
         android:icon="@drawable/ic_event_available_24"
         android:title="@string/title_finished" />
+
     <item
         android:id="@+id/navigation_favorite"
         android:icon="@drawable/ic_favorite_24"
         android:title="@string/favorite" />
+
+    <item
+        android:id="@+id/navigation_option"
+        android:icon="@drawable/ic_settings_24px"
+        android:title="@string/option" />
 
 </menu>
