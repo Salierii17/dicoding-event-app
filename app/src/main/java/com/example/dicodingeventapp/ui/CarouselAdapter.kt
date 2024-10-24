@@ -1,4 +1,4 @@
-package com.example.dicodingeventapp.ui.adapter
+package com.example.dicodingeventapp.ui
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -8,23 +8,23 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dicodingeventapp.data.local.EventEntity
-import com.example.dicodingeventapp.databinding.ItemEventBinding
+import com.example.dicodingeventapp.databinding.CarouselItemEventBinding
 
-class EventListAdapter(private val onClick: (EventEntity) -> Unit) :
-    ListAdapter<EventEntity, EventListAdapter.EventViewHolder>(DIFF_CALLBACK) {
+class CarouselAdapter(private val onClick: (EventEntity) -> Unit) :
+    ListAdapter<EventEntity, CarouselAdapter.CarouselViewHolder>(DIFF_CALLBACK) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
-        val view = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return EventViewHolder(view, onClick)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarouselViewHolder {
+        val view = CarouselItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CarouselViewHolder(view, onClick)
     }
 
-    override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CarouselViewHolder, position: Int) {
         val event = getItem(position)
         holder.bind(event)
     }
 
-    class EventViewHolder(
-        private var binding: ItemEventBinding,
+    class CarouselViewHolder(
+        private var binding: CarouselItemEventBinding,
         val onClick: (EventEntity) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(eventItem: EventEntity) {

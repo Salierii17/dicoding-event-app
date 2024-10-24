@@ -16,5 +16,9 @@
         android:id="@+id/navigation_finished"
         android:icon="@drawable/ic_event_available_24"
         android:title="@string/title_finished" />
+    <item
+        android:id="@+id/navigation_favorite"
+        android:icon="@drawable/ic_favorite_24"
+        android:title="@string/favorite" />
 
 </menu>

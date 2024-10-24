@@ -1,4 +1,4 @@
-package com.example.dicodingeventapp.ui.views
+package com.example.dicodingeventapp.ui.home
 
 
 import android.os.Bundle
@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.local.EventEntity
 import com.example.dicodingeventapp.databinding.FragmentHomeBinding
-import com.example.dicodingeventapp.ui.adapter.CarouselAdapter
+import com.example.dicodingeventapp.ui.CarouselAdapter
 import com.example.dicodingeventapp.ui.adapter.SearchAdapter
-import com.example.dicodingeventapp.ui.viewmodel.EventViewModel
-import com.example.dicodingeventapp.ui.viewmodel.ViewModelFactory
+import com.example.dicodingeventapp.ui.EventViewModel
+import com.example.dicodingeventapp.ui.ViewModelFactory
 import com.example.dicodingeventapp.utils.Event
 import com.example.dicodingeventapp.utils.Result
 import com.google.android.material.snackbar.Snackbar
@@ -134,7 +134,7 @@ class HomeFragment : Fragment() {
     private fun navigateToEventDetail(eventId: Int, eventItem: EventEntity) {
         val bundle = Bundle().apply {
             putInt("event_id", eventId)
-            putParcelable("book_item", eventItem)
+            putParcelable("event_item", eventItem)
         }
         findNavController().navigate(R.id.action_navigation_home_to_eventDetailFragment, bundle)
     }

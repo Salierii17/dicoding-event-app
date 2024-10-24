@@ -7,6 +7,7 @@ import androidx.lifecycle.map
 import com.example.dicodingeventapp.data.local.EventDao
 import com.example.dicodingeventapp.data.local.EventEntity
 import com.example.dicodingeventapp.data.remote.ApiService
+import com.example.dicodingeventapp.data.response.EventDetailResponse
 import com.example.dicodingeventapp.utils.Result
 
 class EventRepository private constructor(
@@ -43,26 +44,32 @@ class EventRepository private constructor(
                     isFavorite
                 )
             }
-//            eventDao.deleteAll()
             eventDao.insertEvents(eventsList)
             emit(Result.Success(eventsList))
         } catch (e: Exception) {
-            Log.e(TAG, "getActiveEvent: ${e.message.toString()}")
+            Log.e(TAG, "getEvents: ${e.message.toString()}")
             emit(Result.Error(e.message.toString()))
         }
         val localData: LiveData<Result<List<EventEntity>>> =
             eventDao.getEvent(isActive).map { Result.Success(it) }
         emitSource(localData)
     }
+    fun getFavoriteEvents(): LiveData<EventEntity> {
+        return eventDao.getFavoriteEvent()
+    }
 
-    fun getFavoriteEvents(id: String): LiveData<List<EventEntity>> {
-        return eventDao.getFavoriteEventById(id)
+    fun getListFavoriteEvents(): LiveData<List<EventEntity>> {
+        return eventDao.getListFavoriteEvent()
+    }
+
+
+    suspend fun fetchEvent(id: Int): EventDetailResponse {
+        return apiService.getDetailEvent(id)
     }
 
     suspend fun setEventFavorite(events: EventEntity, favoriteState: Boolean) {
         events.isFavorite = favoriteState
         eventDao.updateEvents(events)
     }
-
 
 }

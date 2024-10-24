@@ -2,6 +2,7 @@ package com.example.dicodingeventapp.data.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -16,16 +17,29 @@ interface EventDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertEvents(events: List<EventEntity>)
 
-    @Query("SELECT * FROM events WHERE id = :eventId")
-    fun getEventDetail(eventId: Int): LiveData<List<EventEntity>>
+    @Query("SELECT * FROM events WHERE favorite = 1")
+    fun getFavoriteEvent(): LiveData<EventEntity>
 
-    @Query("SELECT * FROM events WHERE  id = :eventId AND favorite = 1")
-    fun getFavoriteEventById(eventId: String): LiveData<List<EventEntity>>
+    @Query("SELECT * FROM events WHERE favorite = 1")
+    fun getListFavoriteEvent(): LiveData<List<EventEntity>>
+
 
     @Update
     suspend fun updateEvents(events: EventEntity)
+
     @Query("DELETE FROM events WHERE favorite = 0")
     suspend fun deleteAll()
+
+
+    @Query("SELECT * FROM events WHERE id = :id")
+    fun getFavoriteEventById(id: String): LiveData<EventEntity>
+
+    @Query("SELECT * FROM events WHERE id = :eventId")
+    fun getEventDetail(eventId: String): LiveData<List<EventEntity>>
+
+
+    //    @Query("SELECT * FROM events WHERE id = :id")
+//    fun getFavoriteEventById(id: String): LiveData<EventEntity>
 
     @Query("SELECT EXISTS(SELECT * FROM events WHERE id = :eventId AND favorite = 1)")
     suspend fun isEventFavorite(eventId: Int): Boolean
