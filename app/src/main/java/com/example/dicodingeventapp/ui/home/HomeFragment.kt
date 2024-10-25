@@ -14,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.local.EventEntity
-import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentHomeBinding
 import com.example.dicodingeventapp.ui.EventListAdapter
 import com.example.dicodingeventapp.ui.EventViewModel
@@ -75,14 +74,17 @@ class HomeFragment : Fragment() {
         binding?.rvSearchResult?.layoutManager = LinearLayoutManager(context)
 
 
-        viewModel.searchResult.observe(viewLifecycleOwner) { eventItem ->
-            setSearchResultData(eventItem, searchAdapter)
-        }
+//        viewModel.searchResult.observe(viewLifecycleOwner) { eventItem ->
+//            setSearchResultData(eventItem, searchAdapter)
+//        }
+
+
         viewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
 
         binding?.rvSearchResult?.adapter = searchAdapter
+
 
         binding?.let { binding ->
             with(binding) {
@@ -91,6 +93,7 @@ class HomeFragment : Fragment() {
                     if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                         val query = searchView.text.toString()
                         searchBar.setText(query)
+                        searchEvent(viewModel, query, searchAdapter)
                         viewModel.searchEvent(query)
                         rvSearchResult.visibility = View.VISIBLE
                         Snackbar.make(view, query, Toast.LENGTH_SHORT).show()
@@ -101,7 +104,35 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
 
+    private fun searchEvent(viewModel: EventViewModel, query: String, adapter: SearchAdapter) {
+        viewModel.searchEvent(query).observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> {
+                        binding?.pbSearch?.visibility = View.VISIBLE
+                    }
+
+                    is Result.Success -> {
+                        binding?.pbSearch?.visibility = View.GONE
+                        val eventData = result.data
+                        val eventDataList = eventData.listEvents
+                        adapter.submitList(eventDataList)
+                    }
+
+                    is Result.Error -> {
+                        binding?.pbSearch?.visibility = View.GONE
+                        Toast.makeText(
+                            context,
+                            "Error occurs:" + result.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                    }
+                }
+            }
+        }
     }
 
     private fun fetchEvent(
@@ -150,15 +181,6 @@ class HomeFragment : Fragment() {
             putInt("event_id", eventId)
         }
         findNavController().navigate(R.id.action_navigation_home_to_eventDetailFragment, bundle)
-    }
-
-    private fun setSearchResultData(eventData: List<ListEventsItem>, adapter: SearchAdapter) {
-        if (eventData.isNotEmpty()) {
-            adapter.submitList(eventData)
-            binding?.rvSearchResult?.visibility = View.VISIBLE
-        } else {
-            binding?.rvSearchResult?.visibility = View.GONE
-        }
     }
 
     private fun showLoading(isLoading: Boolean) {

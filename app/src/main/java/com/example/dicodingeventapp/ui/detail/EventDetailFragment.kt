@@ -7,17 +7,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.local.EventEntity
-import com.example.dicodingeventapp.data.response.ListEventsDetailItem
+import com.example.dicodingeventapp.data.response.EventDetailResponse
 import com.example.dicodingeventapp.databinding.FragmentEventDetailBinding
 import com.example.dicodingeventapp.ui.EventViewModel
 import com.example.dicodingeventapp.ui.ViewModelFactory
-import com.google.android.material.snackbar.Snackbar
+import com.example.dicodingeventapp.utils.Result
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -48,32 +49,39 @@ class EventDetailFragment : Fragment() {
             factory
         }
 
-        viewModel.fetchEventDetail(eventId)
 
-        viewModel.eventDetail.observe(viewLifecycleOwner) { eventDetailData ->
-            eventDetailData.let {
-                eventItem = EventEntity(
-                    eventId = it.id.toString(),
-                    name = it.name,
-                    mediaCover = it.mediaCover,
-                    isActive = passedEventData.isActive,
-                    isFavorite = passedEventData.isFavorite
-                )
-                setEventDetailData(eventDetailData)
-                toggleFavorite(!eventItem.isFavorite)
-            }
-        }
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
+        viewModel.fetchEventDetail(eventId).observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> {
+                        binding?.progressBar?.visibility = View.VISIBLE
+                    }
 
-        viewModel.snackBar.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { message ->
-                Snackbar.make(
-                    requireView(),
-                    message,
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                    is Result.Success -> {
+                        binding?.progressBar?.visibility = View.GONE
+                        val eventData = result.data
+
+                        eventItem = EventEntity(
+                            eventId = passedEventData.eventId,
+                            name = passedEventData.name,
+                            mediaCover = passedEventData.mediaCover,
+                            isActive = passedEventData.isActive,
+                            isFavorite = passedEventData.isFavorite
+                        )
+                        setEventDetailData(eventData)
+                        toggleFavorite(!eventItem.isFavorite)
+                    }
+
+                    is Result.Error -> {
+                        binding?.progressBar?.visibility = View.GONE
+                        Toast.makeText(
+                            context,
+                            "Error occurs:" + result.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                    }
+                }
             }
         }
 
@@ -88,7 +96,8 @@ class EventDetailFragment : Fragment() {
 
     }
 
-    private fun setEventDetailData(eventDetail: ListEventsDetailItem) {
+    private fun setEventDetailData(eventDetailList: EventDetailResponse) {
+        val eventDetail = eventDetailList.event
         binding?.apply {
             Glide.with(root).load(eventDetail.imageLogo).into(imgMediaCover)
             tvName.text = eventDetail.name
@@ -129,10 +138,6 @@ class EventDetailFragment : Fragment() {
             Log.e("EventDetailFragment", "onError : ${e.message.toString()}")
             "Invalid input format"
         }
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding?.progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun toggleFavorite(isFavorite: Boolean) {

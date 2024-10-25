@@ -56,13 +56,31 @@ class EventRepository private constructor(
         emitSource(localData)
     }
 
-    suspend fun fetchEventDetail(id: Int): EventDetailResponse {
-        return apiService.getDetailEvent(id)
+    fun fetchEventDetail(id: Int): LiveData<Result<EventDetailResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getDetailEvent(id)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            Log.e(TAG, "getEvents: ${e.message.toString()}")
+            emit(Result.Error(e.message.toString()))
+        }
     }
 
-    suspend fun searchEvent(query: String): EventResponse {
-        return apiService.searchEvent(query)
+    fun searchEvent(query: String): LiveData<Result<EventResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.searchEvent(query)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
+            Log.e(TAG, "getEvents: ${e.message.toString()}")
+            emit(Result.Error(e.message.toString()))
+        }
     }
+
+//    suspend fun searchEvent(query: String): EventResponse {
+//        return apiService.searchEvent(query)
+//    }
 
     fun getFavoriteEvents(): LiveData<List<EventEntity>> {
         return eventDao.getFavoriteEvent()
