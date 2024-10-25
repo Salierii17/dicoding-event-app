@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.local.EventEntity
 import com.example.dicodingeventapp.databinding.FragmentHomeBinding
-import com.example.dicodingeventapp.ui.CarouselAdapter
+import com.example.dicodingeventapp.ui.EventListAdapter
 import com.example.dicodingeventapp.ui.SearchAdapter
 import com.example.dicodingeventapp.ui.EventViewModel
 import com.example.dicodingeventapp.ui.ViewModelFactory
@@ -44,10 +44,10 @@ class HomeFragment : Fragment() {
             factory
         }
 
-        val eventActiveAdapter = CarouselAdapter { eventItem ->
+        val eventActiveAdapter = EventListAdapter(EventListAdapter.SIZE_SMALL) { eventItem ->
             navigateToEventDetail(eventItem.eventId.toInt(), eventItem)
         }
-        val eventFinishAdapter = CarouselAdapter { eventItem ->
+        val eventFinishAdapter = EventListAdapter(EventListAdapter.SIZE_SMALL) { eventItem ->
             navigateToEventDetail(eventItem.eventId.toInt(), eventItem)
         }
 
@@ -101,7 +101,7 @@ class HomeFragment : Fragment() {
 
     private fun fetchEvent(
         viewModel: EventViewModel,
-        adapter: CarouselAdapter,
+        adapter: EventListAdapter,
         progressBar: ProgressBar?,
         isActive: Int,
     ) {

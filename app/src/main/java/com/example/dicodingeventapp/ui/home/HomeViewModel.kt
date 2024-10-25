@@ -4,15 +4,16 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.dicodingeventapp.data.remote.ApiConfig
+import com.example.dicodingeventapp.data.repository.EventRepository
 import com.example.dicodingeventapp.data.response.EventResponse
 import com.example.dicodingeventapp.data.response.ListEventsItem
-import com.example.dicodingeventapp.data.remote.ApiConfig
 import com.example.dicodingeventapp.utils.Event
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val repository: EventRepository) : ViewModel() {
 
     private val _searchResult = MutableLiveData<List<ListEventsItem>>()
     val searchResult: LiveData<List<ListEventsItem>> = _searchResult

@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dicodingeventapp.data.local.EventEntity
-import com.example.dicodingeventapp.databinding.CarouselItemEventBinding
+import com.example.dicodingeventapp.databinding.ItemEventBinding
 
 class CarouselAdapter(private val onClick: (EventEntity) -> Unit) :
     ListAdapter<EventEntity, CarouselAdapter.CarouselViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarouselViewHolder {
-        val view = CarouselItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view =
+            ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CarouselViewHolder(view, onClick)
     }
 
@@ -23,8 +24,12 @@ class CarouselAdapter(private val onClick: (EventEntity) -> Unit) :
         holder.bind(event)
     }
 
+    override fun getItemCount(): Int {
+        return minOf(super.getItemCount(), 5)
+    }
+
     class CarouselViewHolder(
-        private var binding: CarouselItemEventBinding,
+        private var binding: ItemEventBinding,
         val onClick: (EventEntity) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(eventItem: EventEntity) {

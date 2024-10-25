@@ -37,7 +37,7 @@ class EventFavoriteFragment : Fragment() {
             factory
         }
 
-        val eventAdapter = EventListAdapter { eventItem ->
+        val eventAdapter = EventListAdapter(EventListAdapter.SIZE_LARGE) { eventItem ->
             val bundle = Bundle().apply {
                 putInt("event_id", eventItem.eventId.toInt())
                 putParcelable("event_item", eventItem)

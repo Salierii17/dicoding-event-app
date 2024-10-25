@@ -32,6 +32,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
             _eventDetail.value = detailEvent
         }
     }
+
     fun getFavoriteEvent() = repository.getFavoriteEvents()
 
     fun saveEvents(event: EventEntity) {
