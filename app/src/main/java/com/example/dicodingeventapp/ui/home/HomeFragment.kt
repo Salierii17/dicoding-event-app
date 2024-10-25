@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -13,12 +14,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.local.EventEntity
+import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentHomeBinding
 import com.example.dicodingeventapp.ui.EventListAdapter
-import com.example.dicodingeventapp.ui.SearchAdapter
 import com.example.dicodingeventapp.ui.EventViewModel
+import com.example.dicodingeventapp.ui.SearchAdapter
 import com.example.dicodingeventapp.ui.ViewModelFactory
-import com.example.dicodingeventapp.utils.Event
 import com.example.dicodingeventapp.utils.Result
 import com.google.android.material.snackbar.Snackbar
 
@@ -26,6 +27,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +54,7 @@ class HomeFragment : Fragment() {
         }
 
         val searchAdapter = SearchAdapter { eventItem ->
-            navigateToEventDetail(eventItem.eventId.toInt(), eventItem)
+            navigateToEventDetail(eventItem.id)
         }
 
         // Fetch Active Event
@@ -70,33 +72,36 @@ class HomeFragment : Fragment() {
             setHasFixedSize(true)
             adapter = eventFinishAdapter
         }
-
-//        binding?.rvSearchResult?.adapter = searchAdapter
-
-//        binding?.let { binding ->
-//            with(binding) {
-//                searchView.setupWithSearchBar(searchBar)
-//                searchView.editText.setOnEditorActionListener { _, actionId, _ ->
-//                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-//                        val query = searchView.text.toString()
-//                        searchBar.setText(query)
-//                        homeViewModel.search(query)
-//                        rvSearchResult.visibility = View.VISIBLE
-//                        Snackbar.make(view, query, Toast.LENGTH_SHORT).show()
-//                        true
-//                    } else {
-//                        false
-//                    }
-//                }
-//            }
+        binding?.rvSearchResult?.layoutManager = LinearLayoutManager(context)
 
 
-    }
+        viewModel.searchResult.observe(viewLifecycleOwner) { eventItem ->
+            setSearchResultData(eventItem, searchAdapter)
+        }
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
+        }
 
+        binding?.rvSearchResult?.adapter = searchAdapter
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        binding?.let { binding ->
+            with(binding) {
+                searchView.setupWithSearchBar(searchBar)
+                searchView.editText.setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        val query = searchView.text.toString()
+                        searchBar.setText(query)
+                        viewModel.searchEvent(query)
+                        rvSearchResult.visibility = View.VISIBLE
+                        Snackbar.make(view, query, Toast.LENGTH_SHORT).show()
+                        true
+                    } else {
+                        false
+                    }
+                }
+            }
+        }
+
     }
 
     private fun fetchEvent(
@@ -114,7 +119,7 @@ class HomeFragment : Fragment() {
 
                     is Result.Success -> {
                         progressBar?.visibility = View.GONE
-                        val eventData = result.data
+                        val eventData = result.data.take(5)
                         adapter.submitList(eventData)
                     }
 
@@ -122,9 +127,10 @@ class HomeFragment : Fragment() {
                         progressBar?.visibility = View.GONE
                         Toast.makeText(
                             context,
-                            "Terjadi kesalahan" + result.error,
+                            "Error occurs:" + result.error,
                             Toast.LENGTH_SHORT
                         ).show()
+
                     }
                 }
             }
@@ -139,7 +145,14 @@ class HomeFragment : Fragment() {
         findNavController().navigate(R.id.action_navigation_home_to_eventDetailFragment, bundle)
     }
 
-    private fun setSearchResultData(eventData: List<EventEntity>, adapter: SearchAdapter) {
+    private fun navigateToEventDetail(eventId: Int) {
+        val bundle = Bundle().apply {
+            putInt("event_id", eventId)
+        }
+        findNavController().navigate(R.id.action_navigation_home_to_eventDetailFragment, bundle)
+    }
+
+    private fun setSearchResultData(eventData: List<ListEventsItem>, adapter: SearchAdapter) {
         if (eventData.isNotEmpty()) {
             adapter.submitList(eventData)
             binding?.rvSearchResult?.visibility = View.VISIBLE
@@ -148,17 +161,18 @@ class HomeFragment : Fragment() {
         }
     }
 
-private fun showSnackBar(it: Event<String>) {
-        it.getContentIfNotHandled()?.let { message ->
-            Snackbar.make(
-                requireView(),
-                message,
-                Snackbar.LENGTH_SHORT
-            ).show()
-        }
+    private fun showLoading(isLoading: Boolean) {
+        binding?.pbSearch?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
 }
+
 
 
 

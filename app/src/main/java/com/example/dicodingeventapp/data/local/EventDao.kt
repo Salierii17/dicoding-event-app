@@ -13,6 +13,9 @@ interface EventDao {
     @Query("SELECT * FROM events WHERE Active = :isActive")
     fun getEvent(isActive: Int): LiveData<List<EventEntity>>
 
+    @Query("SELECT EXISTS(SELECT * FROM events WHERE id = :eventId AND favorite = 1)")
+    suspend fun isEventFavorite(eventId: Int): Boolean
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertEvents(events: List<EventEntity>)
 
@@ -31,13 +34,6 @@ interface EventDao {
 
     @Query("SELECT * FROM events WHERE id = :eventId")
     fun getEventDetail(eventId: String): LiveData<List<EventEntity>>
-
-
-    //    @Query("SELECT * FROM events WHERE id = :id")
-//    fun getFavoriteEventById(id: String): LiveData<EventEntity>
-
-    @Query("SELECT EXISTS(SELECT * FROM events WHERE id = :eventId AND favorite = 1)")
-    suspend fun isEventFavorite(eventId: Int): Boolean
 
 
 }

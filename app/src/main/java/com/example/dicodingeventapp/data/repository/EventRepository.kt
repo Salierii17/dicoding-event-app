@@ -8,6 +8,7 @@ import com.example.dicodingeventapp.data.local.EventDao
 import com.example.dicodingeventapp.data.local.EventEntity
 import com.example.dicodingeventapp.data.remote.ApiService
 import com.example.dicodingeventapp.data.response.EventDetailResponse
+import com.example.dicodingeventapp.data.response.EventResponse
 import com.example.dicodingeventapp.utils.Result
 
 class EventRepository private constructor(
@@ -59,6 +60,10 @@ class EventRepository private constructor(
         return apiService.getDetailEvent(id)
     }
 
+    suspend fun searchEvent(query: String): EventResponse {
+        return apiService.searchEvent(query)
+    }
+
     fun getFavoriteEvents(): LiveData<List<EventEntity>> {
         return eventDao.getFavoriteEvent()
     }
@@ -67,5 +72,6 @@ class EventRepository private constructor(
         events.isFavorite = favoriteState
         eventDao.updateEvents(events)
     }
+
 
 }

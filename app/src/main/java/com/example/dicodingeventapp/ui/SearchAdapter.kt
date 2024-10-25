@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.dicodingeventapp.data.local.EventEntity
+import com.example.dicodingeventapp.data.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.ItemSearchLayoutBinding
 
-class SearchAdapter(private val onClick: (EventEntity) -> Unit) :
-    ListAdapter<EventEntity, SearchAdapter.EventViewHolder>(DIFF_CALLBACK) {
+class SearchAdapter(private val onClick: (ListEventsItem) -> Unit) :
+    ListAdapter<ListEventsItem, SearchAdapter.EventViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view =
@@ -25,11 +25,11 @@ class SearchAdapter(private val onClick: (EventEntity) -> Unit) :
 
     class EventViewHolder(
         private var binding: ItemSearchLayoutBinding,
-        val onClick: (EventEntity) -> Unit
+        val onClick: (ListEventsItem) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(eventItem: EventEntity) {
-            Glide.with(binding.root).load(eventItem.mediaCover).into(binding.imgMediaCover)
+        fun bind(eventItem: ListEventsItem) {
+            Glide.with(binding.root).load(eventItem.imageLogo).into(binding.imgMediaCover)
             binding.tvName.text = eventItem.name
 
             itemView.setOnClickListener {
@@ -39,17 +39,17 @@ class SearchAdapter(private val onClick: (EventEntity) -> Unit) :
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<EventEntity>() {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListEventsItem>() {
             override fun areItemsTheSame(
-                oldItem: EventEntity,
-                newItem: EventEntity
+                oldItem: ListEventsItem,
+                newItem: ListEventsItem
             ): Boolean {
                 return oldItem == newItem
             }
 
             override fun areContentsTheSame(
-                oldItem: EventEntity,
-                newItem: EventEntity
+                oldItem: ListEventsItem,
+                newItem: ListEventsItem
             ): Boolean {
                 return oldItem == newItem
             }
