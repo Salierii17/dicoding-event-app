@@ -73,7 +73,6 @@ class HomeFragment : Fragment() {
         }
         binding?.rvSearchResult?.layoutManager = LinearLayoutManager(context)
 
-
         binding?.rvSearchResult?.adapter = searchAdapter
 
 
@@ -172,10 +171,6 @@ class HomeFragment : Fragment() {
             putInt("event_id", eventId)
         }
         findNavController().navigate(R.id.action_navigation_home_to_eventDetailFragment, bundle)
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding?.pbSearch?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {

@@ -50,7 +50,7 @@ class EventListAdapter(
                     binding.main.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
                     binding.tvName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
                     binding.tvName.maxLines = 1
-                    binding.imgMediaCover.scaleType = ImageView.ScaleType.CENTER_CROP
+                    binding.imgMediaCover.scaleType = ImageView.ScaleType.FIT_XY
                 }
 
                 SIZE_LARGE -> {
