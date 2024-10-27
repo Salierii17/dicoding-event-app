@@ -74,15 +74,6 @@ class HomeFragment : Fragment() {
         binding?.rvSearchResult?.layoutManager = LinearLayoutManager(context)
 
 
-//        viewModel.searchResult.observe(viewLifecycleOwner) { eventItem ->
-//            setSearchResultData(eventItem, searchAdapter)
-//        }
-
-
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
-
         binding?.rvSearchResult?.adapter = searchAdapter
 
 

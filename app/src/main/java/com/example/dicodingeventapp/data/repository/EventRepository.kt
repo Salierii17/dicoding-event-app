@@ -78,10 +78,6 @@ class EventRepository private constructor(
         }
     }
 
-//    suspend fun searchEvent(query: String): EventResponse {
-//        return apiService.searchEvent(query)
-//    }
-
     fun getFavoriteEvents(): LiveData<List<EventEntity>> {
         return eventDao.getFavoriteEvent()
     }
