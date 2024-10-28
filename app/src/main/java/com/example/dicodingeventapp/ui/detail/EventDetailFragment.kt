@@ -99,7 +99,11 @@ class EventDetailFragment : Fragment() {
     private fun setEventDetailData(eventDetailList: EventDetailResponse) {
         val eventDetail = eventDetailList.event
         binding?.apply {
-            Glide.with(root).load(eventDetail.imageLogo).into(imgMediaCover)
+            Glide.with(root)
+                .load(eventDetail.imageLogo)
+                .placeholder(R.drawable.ic_loading)
+                .error(R.drawable.ic_error)
+                .into(imgMediaCover)
             tvName.text = eventDetail.name
             tvOwnerName.text = eventDetail.ownerName
             val quota = (eventDetail.quota - eventDetail.registrants).toString()

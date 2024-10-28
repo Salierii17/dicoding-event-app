@@ -1,14 +1,15 @@
 package com.example.dicodingeventapp.ui
 
 import android.annotation.SuppressLint
+import android.text.TextUtils
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.local.EventEntity
 import com.example.dicodingeventapp.databinding.ItemEventBinding
 
@@ -36,6 +37,8 @@ class EventListAdapter(
             binding.tvName.text = eventItem.name
             Glide.with(itemView.context)
                 .load(eventItem.mediaCover)
+                .placeholder(R.drawable.ic_loading)
+                .error(R.drawable.ic_error)
                 .into(binding.imgMediaCover)
 
             itemView.setOnClickListener {
@@ -50,12 +53,14 @@ class EventListAdapter(
                     binding.main.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
                     binding.tvName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
                     binding.tvName.maxLines = 1
-                    binding.imgMediaCover.scaleType = ImageView.ScaleType.FIT_XY
+                    binding.tvName.ellipsize = TextUtils.TruncateAt.END
+                    binding.imgMediaCover.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
                 }
 
                 SIZE_LARGE -> {
                     binding.main.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
                     binding.main.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+
                 }
             }
         }
