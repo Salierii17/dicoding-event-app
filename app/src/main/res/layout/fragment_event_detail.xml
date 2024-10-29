@@ -31,6 +31,8 @@
             android:background="@drawable/rounded_corner_background"
             android:contentDescription="@string/favorite"
             android:padding="12dp"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:src="@drawable/ic_favorite_border_24"
             android:tag="Not Favorite"
             app:layout_constraintBottom_toBottomOf="@+id/imgMediaCover"

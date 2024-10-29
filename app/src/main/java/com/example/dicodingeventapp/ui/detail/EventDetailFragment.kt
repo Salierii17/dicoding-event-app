@@ -28,7 +28,7 @@ class EventDetailFragment : Fragment() {
 
     private val binding get() = _binding
 
-    private lateinit var eventItem: EventEntity
+    private var eventItem: EventEntity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,7 +69,7 @@ class EventDetailFragment : Fragment() {
                             isFavorite = passedEventData.isFavorite
                         )
                         setEventDetailData(eventData)
-                        toggleFavorite(!eventItem.isFavorite)
+                        toggleFavorite(!eventItem?.isFavorite!!)
                     }
 
                     is Result.Error -> {
@@ -86,11 +86,14 @@ class EventDetailFragment : Fragment() {
         }
 
         binding?.btnFavorite?.setOnClickListener {
-            toggleFavorite(eventItem.isFavorite)
-            if (!eventItem.isFavorite) {
-                viewModel.saveEvents(eventItem)
-            } else {
-                viewModel.deleteEvents(eventItem)
+            binding?.btnFavorite?.visibility = View.VISIBLE
+            eventItem?.let { item ->
+                toggleFavorite(item.isFavorite)
+                if (!item.isFavorite) {
+                    viewModel.saveEvents(item)
+                } else {
+                    viewModel.deleteEvents(item)
+                }
             }
         }
 
@@ -113,6 +116,7 @@ class EventDetailFragment : Fragment() {
                 eventDetail.description,
                 HtmlCompat.FROM_HTML_MODE_LEGACY
             )
+            btnFavorite.visibility = View.VISIBLE
             btnLink.setOnClickListener {
                 val url = eventDetail.link
                 val intent = Intent(Intent.ACTION_VIEW)
